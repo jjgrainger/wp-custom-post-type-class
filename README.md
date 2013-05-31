@@ -1,5 +1,4 @@
 # Advanced Custom Post Types
-===
 
 A single class to help you build more advanced custom post types quickly.
 
@@ -170,5 +169,5 @@ so for our books example you will use:
 
 * The class hasn't any methods for making custom fields for post types, reason being is a free plugin such as [Advanced Custom Fields (ACF)](http://advancedcustomfields.com) does a far better job than a class like this ever could!
 * A full wiki will follow shortly
-* The books example used in the README.md can be found in the example.php
+* The books example used in the README.md can be found in the [example.php](https://github.com/jjgrainger/wp-custom-post-type-class/blob/master/example.php)
 
