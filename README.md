@@ -20,7 +20,7 @@ The first parameter is the post type name and is required. ideally the post type
 
 to be specific about other post types names you can pass an associative array:
 
-`post_type_name` - the name of post type (plural, lowercase, underscores)
+`post_type_name` - the name of post type (singular, lowercase, underscores)
 
 `singular` - the singular label of the post type (Book, Person)
 
@@ -31,7 +31,7 @@ to be specific about other post types names you can pass an associative array:
 you pass these names through the first parameter as an array like so
 
 	$people = new CPT(array(
-		'post_type_name' => 'people',
+		'post_type_name' => 'person',
 		'singular' => 'Person',
 		'plural' => 'People',
 		'slug' => 'people'
@@ -44,7 +44,7 @@ The Class uses the Wordpress defaults where possible.
 
 To override the default options simply pass an array of options as the second parameter. Not all options have to be passed just the ones you want to add/override like so:
 
-	$books = new CPT('books', array(
+	$books = new CPT('book', array(
 		'supports' => array('title', 'editor', 'thumbnail', 'comments')
 	));
 
@@ -61,7 +61,7 @@ You can add taxonomies easily using the `register_taxonomy()` method like so:
 this method accepts two arguments, names and options. The taxonomy name is required and can be string (the taxonomy name), or an array of names following same format as post types:
 
 	$books->register_taxonomy(array(
-		'taxonomy_name' => 'genres',
+		'taxonomy_name' => 'genre',
 		'singular' => 'Genre',
 		'plural' => 'Genres',
 		'slug' => 'genre'
@@ -78,7 +78,7 @@ When you register a taxonomy with Advanced Custom Post Types, the taxonomy is *a
 
 You can define what filters you want to appear by using the `filters()` method:
 
-	$books->filters(array('genres'))
+	$books->filters(array('genre'))
 
 By passing an array of taxonomy names you can choose the filters that appear and the order they appear in. If you pass an empty array, no drop down filters will appear on the admin edit screen.
 

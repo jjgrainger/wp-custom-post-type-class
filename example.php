@@ -5,11 +5,11 @@ include_once('CPT.php');
 
 
 // creare a books custom post type
-$books = new CPT('books');
+$books = new CPT('book');
 
 
 // create a genres taxonomy
-$books->register_taxonomy('genres');
+$books->register_taxonomy('genre');
 
 
 // define the columns to appear on the admin edit screen
