@@ -400,9 +400,9 @@ class CPT {
 		
 		}
 
-		// return the string
-		// return ucwords(strtolower(str_replace("_", " ", $name)));
-		return $this->get_human_friendly($name);
+		// return the plural name
+		// add 's' to the end
+		return $this->get_human_friendly($name) . 's';
 	}
 
 
@@ -429,8 +429,7 @@ class CPT {
 		}
 
 		// return the string
-		// removes the 's' from end of string
-		return substr($this->get_human_friendly($name), 0, -1);
+		return $this->get_human_friendly($name);
 
 	}
 
