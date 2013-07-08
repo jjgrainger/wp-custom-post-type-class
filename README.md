@@ -14,7 +14,7 @@ and your ready to roll!
 	
 To create the post type simply create a new object
 
-	$books = new CPT('books');
+	$books = new CPT('book');
 
 The first parameter is the post type name and is required. ideally the post type name is all lowercase and words separated with an underscore `_`.
 
