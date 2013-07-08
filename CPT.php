@@ -4,6 +4,7 @@
 
     Custom Post Type Class
     used to help create custom post types for Wordpress
+    http://github.com/jjgrainger/wp-custom-post-type-class/
 
     @author     jjgrainger
     @url        http://jjgrainger.co.uk
