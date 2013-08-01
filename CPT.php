@@ -683,7 +683,7 @@ class CPT {
             }
 
             // if post type supports comments
-            if(in_array("comments", $this->options['supports'])) {
+            if(post_type_supports($this->post_type_name, 'comments')) {
 
                 $columns['comments'] = '<img alt="Comments" src="'. site_url() .'/wp-admin/images/comment-grey-bubble.png">';
 
