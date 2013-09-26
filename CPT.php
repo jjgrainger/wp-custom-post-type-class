@@ -1087,4 +1087,124 @@ class CPT {
         return $vars;
     }
 
+
+
+    /*
+        function menu icon
+        used to change the menu icon in the admin dashboard
+
+        @param  string  $icon        the name of the icon to use
+    */
+
+    function menu_icon($icon = "post") {
+
+        if(array_key_exists($icon, $this->native_icons)) {
+
+            // set the posts icon var
+            $this->menu_icon = $icon;
+
+            // run action to change post type icon
+            $this->add_action('admin_head', array(&$this, 'set_post_icon'));
+        }
+
+    }
+
+
+
+    /*
+        function set post icon
+        sets the post icon defined by the user
+
+    */
+
+    function set_post_icon() {
+
+        ?><style type="text/css" media="screen">
+            #menu-posts-property .wp-menu-image {
+               background-position: <?php print($this->native_icons[$this->menu_icon]['menu']); ?> !important;
+            }
+
+            #menu-posts-property:hover .wp-menu-image,
+            #menu-posts-property.wp-has-current-submenu .wp-menu-image {
+               background-position: <?php print($this->native_icons[$this->menu_icon]['hover']); ?> !important;
+            }
+
+            #icon-edit.icon32-posts-property {
+                background-position: <?php print($this->native_icons[$this->menu_icon]['edit']); ?> !important;
+            }
+        </style><?php
+
+    }
+
+
+
+    // post icon array
+    public $native_icons = array(
+        'dashboard' => array(
+            'menu' => '-59px -33px',
+            'hover' => '-59px -1px',
+            'edit' => '-137px -5px'
+        ),
+        'posts' => array(
+            'menu' => '-269px -33px',
+            'hover' => '-269px -1px',
+            'edit' => '-552px -5px'
+        ),
+        'media' => array(
+            'menu' => '-119px -33px',
+            'hover' => '-119px -1px',
+            'edit' => '-251px -5px'
+        ),
+        'links' => array(
+            'menu' => '-89px -33px',
+            'hover' => '-89px -1px',
+            'edit' => '-190px -5px'
+        ),
+        'pages' => array(
+            'menu' => '-149px -33px',
+            'hover' => '-149px -1px',
+            'edit' => '-312px -5px'
+        ),
+        'comments' => array(
+            'menu' => '-29px -33px',
+            'hover' => '-29px -1px',
+            'edit' => '-72px -5px'
+        ),
+        'appearance' => array(
+            'menu' => '1px -33px',
+            'hover' => '1px -1px',
+            'edit' => '-11px -5px'
+        ),
+        'plugins' => array(
+            'menu' => '-179px -33px',
+            'hover' => '-179px -1px',
+            'edit' => '-370px -5px'
+        ),
+        'users' => array(
+            'menu' => '-300px -33px',
+            'hover' => '-300px -1px',
+            'edit' => '-600px -5px'
+        ),
+        'tools' => array(
+            'menu' => '-209px -33px',
+            'hover' => '-209px -1px',
+            'edit' => '-432px -5px'
+        ),
+        'settings' => array(
+            'menu' => '-239px -33px',
+            'hover' => '-239px -1px',
+            'edit' => '-492px -5px'
+        ),
+        'cog' => array(
+            'menu' => '-330px -33px',
+            'hover' => '-330px -1px',
+            'edit' => '-708px -5px'
+        ),
+        'keys' => array(
+            'menu' => '-361px -33px',
+            'hover' => '-361px -1px',
+            'edit' => '-661px -5px'
+        )
+    );
+
 }
