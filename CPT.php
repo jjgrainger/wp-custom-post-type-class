@@ -1092,32 +1092,36 @@ class CPT {
     /*
         function menu icon
         used to change the menu icon in the admin dashboard
+        pass name of predefined icon or an array of css for custom icon
 
-        @param  string  $icon        the name of the icon to use
+        @param  mixed  $icon        a string of the name of the icon to use or an array of custom css
     */
 
     function menu_icon($icon = "post") {
 
+        // if a string is passed use a predefined icon
         if(is_string($icon)) {
+
             if(array_key_exists($icon, $this->native_icons)) {
 
                 // set the posts icon var
                 $this->menu_icon = $this->native_icons[$icon];
 
-                // run action to change post type icon
-                $this->add_action('admin_head', array(&$this, 'set_post_icon'));
             }
 
-        // custom icon css passed as array
+        // if an array of custom css is passed use that
         } elseif(is_array($icon)) {
 
             $this->menu_icon = $icon;
 
-             // run action to change post type icon
-            $this->add_action('admin_head', array(&$this, 'set_post_icon'));
         }
 
+        // run action to change post type icon
+        $this->add_action('admin_head', array(&$this, 'set_post_icon'));
+
     }
+
+
 
     /*
         function set post icon
@@ -1128,23 +1132,30 @@ class CPT {
     function set_post_icon() {
 
         ?><style type="text/css" media="screen">
-            #menu-posts-property .wp-menu-image {
+            #menu-posts-<?php print($this->post_type_name); ?> .wp-menu-image {
                <?php print($this->menu_icon['menu']); ?>
             }
 
-            #menu-posts-property:hover .wp-menu-image,
-            #menu-posts-property.wp-has-current-submenu .wp-menu-image {
+            #menu-posts-<?php print($this->post_type_name); ?>:hover .wp-menu-image,
+            #menu-posts-<?php print($this->post_type_name); ?>.wp-has-current-submenu .wp-menu-image {
                <?php print($this->menu_icon['hover']); ?>
             }
 
-            #icon-edit.icon32-posts-property {
+            #icon-edit.icon32-posts-<?php print($this->post_type_name); ?> {
                 <?php print($this->menu_icon['edit']); ?>
             }
         </style><?php
 
     }
 
-    // post icon array
+
+
+    /*
+        post icon array
+        holds the css for different states of native menu icons
+
+    */
+
     public $native_icons = array(
         'dashboard' => array(
             'menu' => 'background-position: -59px -33px !important;',
