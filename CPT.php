@@ -1087,4 +1087,141 @@ class CPT {
         return $vars;
     }
 
+
+
+    /*
+        function menu icon
+        used to change the menu icon in the admin dashboard
+        pass name of predefined icon or an array of css for custom icon
+
+        @param  mixed  $icon        a string of the name of the icon to use or an array of custom css
+    */
+
+    function menu_icon($icon = "post") {
+
+        // if a string is passed use a predefined icon
+        if(is_string($icon)) {
+
+            if(array_key_exists($icon, $this->native_icons)) {
+
+                // set the posts icon var
+                $this->menu_icon = $this->native_icons[$icon];
+
+            }
+
+        // if an array of custom css is passed use that
+        } elseif(is_array($icon)) {
+
+            $this->menu_icon = $icon;
+
+        }
+
+        // run action to change post type icon
+        $this->add_action('admin_head', array(&$this, 'set_post_icon'));
+
+    }
+
+
+
+    /*
+        function set post icon
+        sets the post icon defined by the user
+
+    */
+
+    function set_post_icon() {
+
+        ?><style type="text/css" media="screen">
+            #menu-posts-<?php print($this->post_type_name); ?> .wp-menu-image {
+               <?php print($this->menu_icon['menu']); ?>
+            }
+
+            #menu-posts-<?php print($this->post_type_name); ?>:hover .wp-menu-image,
+            #menu-posts-<?php print($this->post_type_name); ?>.wp-has-current-submenu .wp-menu-image {
+               <?php print($this->menu_icon['hover']); ?>
+            }
+
+            #icon-edit.icon32-posts-<?php print($this->post_type_name); ?> {
+                <?php print($this->menu_icon['edit']); ?>
+            }
+        </style><?php
+
+    }
+
+
+
+    /*
+        post icon array
+        holds the css for different states of native menu icons
+
+    */
+
+    public $native_icons = array(
+        'dashboard' => array(
+            'menu' => 'background-position: -59px -33px !important;',
+            'hover' => 'background-position: -59px -1px !important;',
+            'edit' => 'background-position: -137px -5px !important;'
+        ),
+        'posts' => array(
+            'menu' => 'background-position: -269px -33px !important;',
+            'hover' => 'background-position: -269px -1px !important;',
+            'edit' => 'background-position: -552px -5px !important;'
+        ),
+        'media' => array(
+            'menu' => 'background-position: -119px -33px !important;',
+            'hover' => 'background-position: -119px -1px !important;',
+            'edit' => 'background-position: -251px -5px !important;'
+        ),
+        'links' => array(
+            'menu' => 'background-position: -89px -33px !important;',
+            'hover' => 'background-position: -89px -1px !important;',
+            'edit' => 'background-position: -190px -5px !important;'
+        ),
+        'pages' => array(
+            'menu' => 'background-position: -149px -33px !important;',
+            'hover' => 'background-position: -149px -1px !important;',
+            'edit' => 'background-position: -312px -5px !important;'
+        ),
+        'comments' => array(
+            'menu' => 'background-position: -29px -33px !important;',
+            'hover' => 'background-position: -29px -1px !important;',
+            'edit' => 'background-position: -72px -5px !important;'
+        ),
+        'appearance' => array(
+            'menu' => 'background-position: 1px -33px !important;',
+            'hover' => 'background-position: 1px -1px !important;',
+            'edit' => 'background-position: -11px -5px !important;'
+        ),
+        'plugins' => array(
+            'menu' => 'background-position: -179px -33px !important;',
+            'hover' => 'background-position: -179px -1px !important;',
+            'edit' => 'background-position: -370px -5px !important;'
+        ),
+        'users' => array(
+            'menu' => 'background-position: -300px -33px !important;',
+            'hover' => 'background-position: -300px -1px !important;',
+            'edit' => 'background-position: -600px -5px !important;'
+        ),
+        'tools' => array(
+            'menu' => 'background-position: -209px -33px !important;',
+            'hover' => 'background-position: -209px -1px !important;',
+            'edit' => 'background-position: -432px -5px !important;'
+        ),
+        'settings' => array(
+            'menu' => 'background-position: -239px -33px !important;',
+            'hover' => 'background-position: -239px -1px !important;',
+            'edit' => 'background-position: -492px -5px !important;'
+        ),
+        'cog' => array(
+            'menu' => 'background-position: -330px -33px !important;',
+            'hover' => 'background-position: -330px -1px !important;',
+            'edit' => 'background-position: -708px -5px !important;'
+        ),
+        'keys' => array(
+            'menu' => 'background-position: -361px -33px !important;',
+            'hover' => 'background-position: -361px -1px !important;',
+            'edit' => 'background-position: -661px -5px !important;'
+        )
+    );
+
 }

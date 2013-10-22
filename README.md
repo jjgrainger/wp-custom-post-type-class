@@ -165,6 +165,48 @@ so for our books example you will use:
 		'rating' => array('rating', true)
 	));
 
+### Menu Icons
+
+To make your post type unique and stand out in the admin menu, you can define the menu icon your post type uses with the `menu_icon()` method.
+
+#### Native Wordpress Icons
+To use one of the existing native icons simply pass its name as a string like so:
+
+	$books->menu_icon("pages");
+
+You can choose one of the following:
+
+* dashboard
+* posts
+* media
+* links
+* pages
+* comments
+* appearance
+* plugins
+* users
+* tools
+* settings
+* cog
+* keys
+
+#### Custom Icon
+
+To use a custom icon simply pass an array of the appropriate CSS like so
+
+	$books->menu_icon(array(
+		"menu" => "background-image: url('/path/to/image/book.png');",
+		"hover" => "background-image: url('/path/to/image/book-hover.png');",
+		"edit" => "background-image: url('/path/to/image/book-large.png');"
+	));
+
+The three different values are used for the different states/positions
+
+* `menu` - the default menu icon that appears in the admin bar
+* `hover` - the admin menu icon when the menu item is being hovered
+* `edit` - the large icon that appears on the edit screen 
+
+
 ## Notes
 
 * The class hasn't any methods for making custom fields for post types, reason being is a free plugin such as [Advanced Custom Fields (ACF)](http://advancedcustomfields.com) does a far better job than a class like this ever could!

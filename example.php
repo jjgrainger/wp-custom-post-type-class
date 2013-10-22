@@ -44,3 +44,6 @@ $books->sortable(array(
     'price' => array('price', true),
     'rating' => array('rating', true)
 ));
+
+
+$books->menu_icon("pages");
