@@ -210,6 +210,7 @@ The three different values are used for the different states/positions
 ## Notes
 
 * The class hasn't any methods for making custom fields for post types, reason being is a free plugin such as [Advanced Custom Fields (ACF)](http://advancedcustomfields.com) does a far better job than a class like this ever could!
-* A full wiki will follow shortly
 * The books example used in the README.md can be found in the [example.php](https://github.com/jjgrainger/wp-custom-post-type-class/blob/master/example.php)
+* Licensed under the [MIT License](https://github.com/jjgrainger/wp-custom-post-type-class/blob/master/LICENSE)
+* Maintained under the [Semantic Versioning Guide](http://semver.org)
 
