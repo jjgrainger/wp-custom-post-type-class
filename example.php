@@ -1,14 +1,14 @@
 <?php
 
-// include the Custom Post Type Class
+// include the custom post type class
 include_once('CPT.php');
 
 
-// creare a books custom post type
+// create a book custom post type
 $books = new CPT('book');
 
 
-// create a genres taxonomy
+// create a genre taxonomy
 $books->register_taxonomy('genre');
 
 
@@ -46,4 +46,5 @@ $books->sortable(array(
 ));
 
 
+// use "pages" icon for post type
 $books->menu_icon("pages");
