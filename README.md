@@ -6,7 +6,9 @@ A single class to help you build more advanced custom post types quickly.
 
 First include the class file into your themes `functions.php` like so:
 
-	include_once('CPT.php');
+```php
+include_once('CPT.php');
+```
 	
 and your ready to roll!
 
@@ -14,7 +16,9 @@ and your ready to roll!
 	
 To create the post type simply create a new object
 
-	$books = new CPT('book');
+```php
+$books = new CPT('book');
+```
 
 The first parameter is the post type name and is required. ideally the post type name is all lowercase and words separated with an underscore `_`.
 
@@ -30,12 +34,14 @@ to be specific about other post types names you can pass an associative array:
 
 you pass these names through the first parameter as an array like so
 
-	$people = new CPT(array(
-		'post_type_name' => 'person',
-		'singular' => 'Person',
-		'plural' => 'People',
-		'slug' => 'people'
-	));
+```php
+$people = new CPT(array(
+	'post_type_name' => 'person',
+	'singular' => 'Person',
+	'plural' => 'People',
+	'slug' => 'people'
+));
+```
 
 The optional second parameter is the arguments for the post_type.
 see [Wordpress codex](http://codex.wordpress.org/Function_Reference/register_post_type#Parameters) for available options.
@@ -44,10 +50,11 @@ The Class uses the Wordpress defaults where possible.
 
 To override the default options simply pass an array of options as the second parameter. Not all options have to be passed just the ones you want to add/override like so:
 
-	$books = new CPT('book', array(
-		'supports' => array('title', 'editor', 'thumbnail', 'comments')
-	));
-
+```php
+$books = new CPT('book', array(
+	'supports' => array('title', 'editor', 'thumbnail', 'comments')
+));
+```
 
 See the [Wordpress codex](http://codex.wordpress.org/Function_Reference/register_post_type#Parameters) for all available options.
 
@@ -56,16 +63,20 @@ See the [Wordpress codex](http://codex.wordpress.org/Function_Reference/register
 
 You can add taxonomies easily using the `register_taxonomy()` method like so:
 
-	$books->register_taxonomy('genres');
+```php
+$books->register_taxonomy('genres');
+```
 
 this method accepts two arguments, names and options. The taxonomy name is required and can be string (the taxonomy name), or an array of names following same format as post types:
 
-	$books->register_taxonomy(array(
-		'taxonomy_name' => 'genre',
-		'singular' => 'Genre',
-		'plural' => 'Genres',
-		'slug' => 'genre'
-	));
+```php
+$books->register_taxonomy(array(
+	'taxonomy_name' => 'genre',
+	'singular' => 'Genre',
+	'plural' => 'Genres',
+	'slug' => 'genre'
+));
+```
 
 Again options can be passed optionally as an array. see the [Wordpress codex](http://codex.wordpress.org/Function_Reference/register_taxonomy#Parameters) for all possible options.
 
@@ -78,7 +89,9 @@ When you register a taxonomy with Advanced Custom Post Types, the taxonomy is *a
 
 You can define what filters you want to appear by using the `filters()` method:
 
-	$books->filters(array('genre'))
+```php
+$books->filters(array('genre'))
+```
 
 By passing an array of taxonomy names you can choose the filters that appear and the order they appear in. If you pass an empty array, no drop down filters will appear on the admin edit screen.
 
@@ -93,14 +106,16 @@ This class doesn't have any methods for adding custom fields as [Advanced Custom
 
 You can define what columns you want to appear on the admin edit screen with the `columns()` method by passing an array like so:
 
-	$books->columns(array(
-		'cb' => '<input type="checkbox" />',
-		'title' => __('Title'),
-		'genres' => __('Genres'),
-		'price' => __('Price'),
-		'rating' => __('Rating'),
-		'date' => __('Date')
-	));
+```php
+$books->columns(array(
+	'cb' => '<input type="checkbox" />',
+	'title' => __('Title'),
+	'genres' => __('Genres'),
+	'price' => __('Price'),
+	'rating' => __('Rating'),
+	'date' => __('Date')
+));
+```
 
 The key defines the name of the column, the value is the label that appears for that column. The following column names are *automagically* populated by the class:
 
@@ -118,19 +133,23 @@ You will need to create a function to populate a column that isn't *automagicall
 
 You do so with the `populate_column()` method like so:
 
-	$books->populate_column('column_name', function($column, $post) {
-		
-		// your code goes here…
+```php
+$books->populate_column('column_name', function($column, $post) {
 	
-	}); 
+	// your code goes here…
+
+}); 
+```
 
 so we can populate our price column like so:
 
-	$books->populate_column('price', function($column, $post) {
+```php
+$books->populate_column('price', function($column, $post) {
+	
+	echo "£" . get_field('price'); // ACF get_field() function
 		
-		echo "£" . get_field('price'); // ACF get_field() function
-		
-	}); 
+}); 
+```
 
 The method will pass two variables into the function:
 
@@ -143,9 +162,11 @@ These are passed to help you populate the column appropriately.
 
 If it makes sense that column should be sortable by ascending/descending you can define custom sortable columns like so:
 
-	$books->sortable(array(
-		'column_name' => array('meta_key', true)
-	));
+```php
+$books->sortable(array(
+	'column_name' => array('meta_key', true)
+));
+```
 
 The `true/false` is used to define whether the meta value is a string or integer,
 reason being is that if numbers are ordered as a string, numbers such as:
@@ -160,10 +181,12 @@ By adding the option true value Advanced Custom Post Types knows the values must
 
 so for our books example you will use:
 
-	$books->sortable(array(
-		'price' => array('price', true),
-		'rating' => array('rating', true)
-	));
+```php
+$books->sortable(array(
+	'price' => array('price', true),
+	'rating' => array('rating', true)
+));
+```
 
 ### Menu Icons
 
@@ -172,7 +195,9 @@ To make your post type unique and stand out in the admin menu, you can define th
 #### Native Wordpress Icons
 To use one of the existing native icons simply pass its name as a string like so:
 
-	$books->menu_icon("pages");
+```php
+$books->menu_icon("pages");
+```
 
 You can choose one of the following:
 
@@ -194,11 +219,13 @@ You can choose one of the following:
 
 To use a custom icon simply pass an array of the appropriate CSS like so
 
-	$books->menu_icon(array(
-		"menu" => "background-image: url('/path/to/image/book.png');",
-		"hover" => "background-image: url('/path/to/image/book-hover.png');",
-		"edit" => "background-image: url('/path/to/image/book-large.png');"
-	));
+```php
+$books->menu_icon(array(
+	"menu" => "background-image: url('/path/to/image/book.png');",
+	"hover" => "background-image: url('/path/to/image/book-hover.png');",
+	"edit" => "background-image: url('/path/to/image/book-large.png');"
+));
+```
 
 The three different values are used for the different states/positions
 
