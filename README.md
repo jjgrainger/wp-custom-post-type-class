@@ -1,4 +1,4 @@
-# WP Custom Post Type Class v1.0
+# WP Custom Post Type Class v1.0.1
 
 A single class to help you build more advanced custom post types quickly.
 
@@ -80,6 +80,9 @@ $books->register_taxonomy(array(
 
 Again options can be passed optionally as an array. see the [Wordpress codex](http://codex.wordpress.org/Function_Reference/register_taxonomy#Parameters) for all possible options.
 
+### Existing Taxonomies
+
+You can add exisiting taxonomies to the post type by passing the taxonomy name through the `register_taxonomy` method. You will only need to specify the options for the custom taxonomy **once**, when its first registered.
 
 ## Admin Edit Screen
 
@@ -90,7 +93,7 @@ When you register a taxonomy with Advanced Custom Post Types, the taxonomy is *a
 You can define what filters you want to appear by using the `filters()` method:
 
 ```php
-$books->filters(array('genre'))
+$books->filters(array('genre'));
 ```
 
 By passing an array of taxonomy names you can choose the filters that appear and the order they appear in. If you pass an empty array, no drop down filters will appear on the admin edit screen.
