@@ -534,7 +534,6 @@ class CPT {
         register a taxonomy to a post type
 
         @param  string          $taxonomy_name      the slug for the taxonomy
-        @param  mixed           $post_type          string or array of post type(s) to register the taxonomy to
         @param  array           $options            taxonomy options
         
         see Wordpress codex
@@ -633,11 +632,19 @@ class CPT {
                 register_taxonomy($taxonomy_name, $post_type, $options);
             });
 
-            // add the taxonomy to the object array
-            // this is used to add columns and filters to admin pannel
-            $this->taxonomies[] = $taxonomy_name;
+            
+        } else {
+
+            // if taxonomy exists, attach exisiting taxonomy to post type
+            $this->add_action('init', function() use($taxonomy_name, $post_type) {
+                register_taxonomy_for_object_type($taxonomy_name, $post_type);
+            });
 
         }
+
+        // add the taxonomy to the object array
+        // this is used to add columns and filters to admin pannel
+        $this->taxonomies[] = $taxonomy_name;
 
         // add taxonomy to admin edit columns
         $this->add_filter('manage_edit-' . $post_type . '_columns', array(&$this, 'add_admin_columns'));
