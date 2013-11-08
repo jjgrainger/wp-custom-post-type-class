@@ -629,7 +629,9 @@ class CPT {
         if(!taxonomy_exists($taxonomy_name)) {
 
             // register the taxonomy with Wordpress
-            register_taxonomy($taxonomy_name, $post_type, $options);
+            $this->add_action('init', function() use($taxonomy_name, $post_type, $options) {
+                register_taxonomy($taxonomy_name, $post_type, $options);
+            });
 
             // add the taxonomy to the object array
             // this is used to add columns and filters to admin pannel
