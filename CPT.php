@@ -267,6 +267,9 @@ class CPT {
         // set the new array as defaults
         $new_array = $defaults;
 
+        // return the value if it is false
+        if($options === false) return false;
+
         // foreach new option to be added
         foreach($options as $key => $value) {
             
