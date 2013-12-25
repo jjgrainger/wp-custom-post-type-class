@@ -82,7 +82,7 @@ class CPT {
         used in add_taxonmy_filters()
     */
 
-    public $filters; 
+    public $filters;
 
 
 
@@ -116,7 +116,7 @@ class CPT {
 
     /*
         @function __contructor(@post_type_name, @options)
-        
+
         @param  mixed   $post_type_names    The name(s) of the post type, accepts (post type name, slug, plural, singlualr)
         @param  array   $options            User submitted options
     */
@@ -125,7 +125,7 @@ class CPT {
 
         // check if post type names is string or array
         if(is_array($post_type_names)) {
-            
+
             // add names to object
             $names = array(
                 'singular',
@@ -144,7 +144,7 @@ class CPT {
 
                     // use the user setting
                     $this->$name = $post_type_names[$name];
-                
+
                 // else generate the name
                 } else {
 
@@ -153,9 +153,9 @@ class CPT {
 
                     // generate the name
                     $this->$name = $this->$method();
-                
+
                 }
-            
+
             }
 
         // else the post type name is only supplied
@@ -176,7 +176,7 @@ class CPT {
         }
 
         // set the user submitted options to the object
-        $this->options = $options;      
+        $this->options = $options;
 
         // register the post type
         $this->add_action('init', array(&$this, 'register_post_type'));
@@ -246,7 +246,7 @@ class CPT {
 
             // write variable and value
             $this->$var = $value;
-        
+
         }
 
     }
@@ -263,7 +263,7 @@ class CPT {
     */
 
     function options_merge($defaults, $options) {
-        
+
         // set the new array as defaults
         $new_array = $defaults;
 
@@ -272,7 +272,7 @@ class CPT {
 
         // foreach new option to be added
         foreach($options as $key => $value) {
-            
+
             // if isset in the defaults array
             if(isset($defaults[$key])) {
 
@@ -310,7 +310,7 @@ class CPT {
     /*
         helper function add_action
         used to create add_action wordpress filter
-        
+
         see Wordpress Codex
         http://codex.wordpress.org/Function_Reference/add_action
 
@@ -332,7 +332,7 @@ class CPT {
     /*
         helper function add_filter
         used to create add_filter wordpress filter
-        
+
         see Wordpress Codex
         http://codex.wordpress.org/Function_Reference/add_filter
 
@@ -390,7 +390,7 @@ class CPT {
         ucwords      capitalize words
         strtolower   makes string lowercase before capitalizing
         str_replace  replace all instances of _ to space
-        
+
         @param   string  $name      the slug name you want to pluralize
         @return  string             the friendly pluralized name
     */
@@ -401,7 +401,7 @@ class CPT {
         if(!isset($name)) {
 
             $name = $this->post_type_name;
-        
+
         }
 
         // return the plural name
@@ -418,7 +418,7 @@ class CPT {
         ucwords      capitalize words
         strtolower   makes string lowercase before capitalizing
         str_replace  replace all instances of _ to space
-        
+
         @param   string  $name      the slug name you want to unpluralize
         @return  string             the friendly singular name
     */
@@ -429,7 +429,7 @@ class CPT {
         if(!isset($name)) {
 
             $name = $this->post_type_name;
-        
+
         }
 
         // return the string
@@ -446,7 +446,7 @@ class CPT {
         ucwords      capitalize words
         strtolower   makes string lowercase before capitalizing
         str_replace  replace all instances of hyphens and underscores to spaces
-        
+
         @param   string  $name      the name you want to make friendly
         @return  string             the human friendly name
     */
@@ -476,7 +476,7 @@ class CPT {
     */
 
     function register_post_type() {
-        
+
         // friendly post type names
         $plural   = $this->plural;
         $singular = $this->singular;
@@ -496,7 +496,7 @@ class CPT {
             'search_items' => __('Search ' . $plural),
             'not_found' =>  __('No ' . $plural . ' found'),
             'not_found_in_trash' => __('No ' . $plural . ' found in Trash'),
-            'parent_item_colon' => __('Parent ' . $singular . ':')  
+            'parent_item_colon' => __('Parent ' . $singular . ':')
         );
 
         // default options
@@ -535,7 +535,7 @@ class CPT {
 
         @param  string          $taxonomy_name      the slug for the taxonomy
         @param  array           $options            taxonomy options
-        
+
         see Wordpress codex
         http://codex.wordpress.org/Function_Reference/register_taxonomy
     */
@@ -544,7 +544,7 @@ class CPT {
 
         // post type defaults to $this post type if unspecified
         $post_type = $this->post_type_name;
-        
+
         // an array of the names required excluding taxonomy_name
         $names = array(
             'singular',
@@ -566,7 +566,7 @@ class CPT {
 
                     // use user submitted name
                     $$name = $taxonomy_names[$name];
-                
+
                 // else generate the name
                 } else {
 
@@ -582,13 +582,13 @@ class CPT {
 
         // else if only the taxonomy_name has been supplied
         } else  {
-        
+
             // create user friendly names
             $taxonomy_name = $taxonomy_names;
             $singular = $this->get_singular($taxonomy_name);
             $plural   = $this->get_plural($taxonomy_name);
             $slug     = $this->get_slug($taxonomy_name);
-        
+
         }
 
         // default labels
@@ -597,14 +597,14 @@ class CPT {
             'singular_name' => _($singular),
             'menu_name' => __($plural),
             'all_items' => __('All ' . $plural),
-            'edit_item' => __('Edit ' . $singular), 
+            'edit_item' => __('Edit ' . $singular),
             'view_item' => __('View ' . $singular),
             'update_item' => __('Update ' . $singular),
             'add_new_item' => __('Add New ' . $singular),
             'new_item_name' => __('New ' . $singular . ' Name'),
             'parent_item' => __('Parent ' . $plural),
             'parent_item_colon' => __('Parent ' . $plural .':'),
-            'search_items' =>  __('Search ' . $plural),         
+            'search_items' =>  __('Search ' . $plural),
             'popular_items' => __('Popular ' . $plural),
             'separate_items_with_commas' => __('Seperate ' . $plural . ' with commas'),
             'add_or_remove_items' => __('Add or remove ' . $plural),
@@ -632,7 +632,7 @@ class CPT {
                 register_taxonomy($taxonomy_name, $post_type, $options);
             });
 
-            
+
         } else {
 
             // if taxonomy exists, attach exisiting taxonomy to post type
@@ -651,7 +651,7 @@ class CPT {
 
         // populate the taxonomy columns with the posts terms
         $this->add_action('manage_' . $post_type . '_posts_custom_column', array(&$this, 'populate_admin_columns'), 10, 2);
-        
+
         // add filter select option to admin edit
         $this->add_action('restrict_manage_posts', array(&$this, 'add_taxonomy_filters'));
 
@@ -662,7 +662,7 @@ class CPT {
     /*
         function add_admin_columns
         adds columns to the admin edit screen
-        
+
         function is used with add_action
     */
 
@@ -721,7 +721,7 @@ class CPT {
     /*
         function populate_admin_columns
         populates custom columns on the admin edit screen
-        
+
         function is used with add_action
     */
 
@@ -781,10 +781,10 @@ class CPT {
             break;
 
             // if column is for the post ID
-            case 'post_id' : 
+            case 'post_id' :
 
                 echo $post->ID;
-            
+
             break;
 
             // if the column is prepended with 'meta_'
@@ -801,7 +801,7 @@ class CPT {
             break;
 
             // if the column is post thumbnail
-            case 'icon' : 
+            case 'icon' :
 
                 // create the edit link
                 $link = esc_url(add_query_arg(array('post' => $post->ID, 'action' => 'edit'), 'post.php'));
@@ -818,14 +818,14 @@ class CPT {
 
                     // display default media image with link
                     echo '<a href="'.$link.'"><img src="'. site_url('/wp-includes/images/crystal/default.png') .'" alt="'. $post->post_title .'" /></a>';
-                
+
                 }
 
             break;
 
             // default case checks if the column has a user function
             // this is most commonly used for custom fields
-            default : 
+            default :
 
                 // if there are user custom columns to populate
                 if(isset($this->custom_populate_columns) && is_array($this->custom_populate_columns)) {
@@ -838,7 +838,7 @@ class CPT {
 
                     }
 
-                } 
+                }
 
             break;
 
@@ -851,7 +851,7 @@ class CPT {
     /*
         function filters
         user function to define which taxonomy filters to display on the admin page
-        
+
         @param  array  $filters         an array of taxonomy filters to display
 
     */
@@ -868,7 +868,7 @@ class CPT {
     /*
         function add_taxtonomy_filters
         creates select fields for filtering posts by taxonomies on admin edit screen
-        
+
     */
 
     function add_taxonomy_filters() {
@@ -917,7 +917,7 @@ class CPT {
 
                     // foreach term create an option field
                     foreach ($terms as $term) {
-                        
+
                         // if filtered by this term make it selected
                         if(isset($_GET[$tax_slug]) && $_GET[$tax_slug] === $term->slug) {
 
@@ -948,7 +948,7 @@ class CPT {
     /*
         function columns
         user function to choose columns to be displayed on the admin edit screen
-        
+
         @param  array  $columns         an array of columns to be displayed
 
     */
@@ -960,7 +960,7 @@ class CPT {
 
             // assign user submitted columns to object
             $this->columns = $columns;
-        
+
         }
 
     }
@@ -991,7 +991,7 @@ class CPT {
     */
 
     function sortable($columns = array()) {
-        
+
         // assign user defined sortable columns to object variable
         $this->sortable = $columns;
 
@@ -1098,142 +1098,4 @@ class CPT {
 
         return $vars;
     }
-
-
-
-    /*
-        function menu icon
-        used to change the menu icon in the admin dashboard
-        pass name of predefined icon or an array of css for custom icon
-
-        @param  mixed  $icon        a string of the name of the icon to use or an array of custom css
-    */
-
-    function menu_icon($icon = "post") {
-
-        // if a string is passed use a predefined icon
-        if(is_string($icon)) {
-
-            if(array_key_exists($icon, $this->native_icons)) {
-
-                // set the posts icon var
-                $this->menu_icon = $this->native_icons[$icon];
-
-            }
-
-        // if an array of custom css is passed use that
-        } elseif(is_array($icon)) {
-
-            $this->menu_icon = $icon;
-
-        }
-
-        // run action to change post type icon
-        $this->add_action('admin_head', array(&$this, 'set_post_icon'));
-
-    }
-
-
-
-    /*
-        function set post icon
-        sets the post icon defined by the user
-
-    */
-
-    function set_post_icon() {
-
-        ?><style type="text/css" media="screen">
-            #menu-posts-<?php print($this->post_type_name); ?> .wp-menu-image {
-               <?php print($this->menu_icon['menu']); ?>
-            }
-
-            #menu-posts-<?php print($this->post_type_name); ?>:hover .wp-menu-image,
-            #menu-posts-<?php print($this->post_type_name); ?>.wp-has-current-submenu .wp-menu-image {
-               <?php print($this->menu_icon['hover']); ?>
-            }
-
-            #icon-edit.icon32-posts-<?php print($this->post_type_name); ?> {
-                <?php print($this->menu_icon['edit']); ?>
-            }
-        </style><?php
-
-    }
-
-
-
-    /*
-        post icon array
-        holds the css for different states of native menu icons
-
-    */
-
-    public $native_icons = array(
-        'dashboard' => array(
-            'menu' => 'background-position: -59px -33px !important;',
-            'hover' => 'background-position: -59px -1px !important;',
-            'edit' => 'background-position: -137px -5px !important;'
-        ),
-        'posts' => array(
-            'menu' => 'background-position: -269px -33px !important;',
-            'hover' => 'background-position: -269px -1px !important;',
-            'edit' => 'background-position: -552px -5px !important;'
-        ),
-        'media' => array(
-            'menu' => 'background-position: -119px -33px !important;',
-            'hover' => 'background-position: -119px -1px !important;',
-            'edit' => 'background-position: -251px -5px !important;'
-        ),
-        'links' => array(
-            'menu' => 'background-position: -89px -33px !important;',
-            'hover' => 'background-position: -89px -1px !important;',
-            'edit' => 'background-position: -190px -5px !important;'
-        ),
-        'pages' => array(
-            'menu' => 'background-position: -149px -33px !important;',
-            'hover' => 'background-position: -149px -1px !important;',
-            'edit' => 'background-position: -312px -5px !important;'
-        ),
-        'comments' => array(
-            'menu' => 'background-position: -29px -33px !important;',
-            'hover' => 'background-position: -29px -1px !important;',
-            'edit' => 'background-position: -72px -5px !important;'
-        ),
-        'appearance' => array(
-            'menu' => 'background-position: 1px -33px !important;',
-            'hover' => 'background-position: 1px -1px !important;',
-            'edit' => 'background-position: -11px -5px !important;'
-        ),
-        'plugins' => array(
-            'menu' => 'background-position: -179px -33px !important;',
-            'hover' => 'background-position: -179px -1px !important;',
-            'edit' => 'background-position: -370px -5px !important;'
-        ),
-        'users' => array(
-            'menu' => 'background-position: -300px -33px !important;',
-            'hover' => 'background-position: -300px -1px !important;',
-            'edit' => 'background-position: -600px -5px !important;'
-        ),
-        'tools' => array(
-            'menu' => 'background-position: -209px -33px !important;',
-            'hover' => 'background-position: -209px -1px !important;',
-            'edit' => 'background-position: -432px -5px !important;'
-        ),
-        'settings' => array(
-            'menu' => 'background-position: -239px -33px !important;',
-            'hover' => 'background-position: -239px -1px !important;',
-            'edit' => 'background-position: -492px -5px !important;'
-        ),
-        'cog' => array(
-            'menu' => 'background-position: -330px -33px !important;',
-            'hover' => 'background-position: -330px -1px !important;',
-            'edit' => 'background-position: -708px -5px !important;'
-        ),
-        'keys' => array(
-            'menu' => 'background-position: -361px -33px !important;',
-            'hover' => 'background-position: -361px -1px !important;',
-            'edit' => 'background-position: -661px -5px !important;'
-        )
-    );
-
 }
