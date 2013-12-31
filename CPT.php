@@ -1111,25 +1111,46 @@ class CPT {
 
     function menu_icon($icon = "post") {
 
-        // if a string is passed use a predefined icon
-        if(is_string($icon)) {
+        // WP 3.8 changed the icon system to use an icon font.
+        // http://melchoyce.github.io/dashicons/
+        global $wp_version;
+        
+        if ( $wp_version >= 3.8 ) {
 
-            if(array_key_exists($icon, $this->native_icons)) {
+            if(is_string($icon) && stripos($icon, "dashicons") !== FALSE) {
 
-                // set the posts icon var
-                $this->menu_icon = $this->native_icons[$icon];
+                $this->options["menu_icon"] = $icon;
+
+            } else {
+                // set a default        
+                $this->options["menu_icon"] = "dashicons-admin-page";
 
             }
 
-        // if an array of custom css is passed use that
-        } elseif(is_array($icon)) {
+        } else { 
 
-            $this->menu_icon = $icon;
+            // if a string is passed use a predefined icon
+            if(is_string($icon)) {
+
+                if(array_key_exists($icon, $this->native_icons)) {
+
+                    // set the posts icon var
+                    $this->menu_icon = $this->native_icons[$icon];
+
+                }
+
+            // if an array of custom css is passed use that
+            } elseif(is_array($icon)) {
+
+                $this->menu_icon = $icon;
+
+            }
+
+            // run action to change post type icon
+            $this->add_action('admin_head', array(&$this, 'set_post_icon'));
 
         }
 
-        // run action to change post type icon
-        $this->add_action('admin_head', array(&$this, 'set_post_icon'));
 
     }
 
