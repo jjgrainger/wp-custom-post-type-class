@@ -47,4 +47,4 @@ $books->sortable(array(
 
 
 // use "pages" icon for post type
-$books->menu_icon("pages");
+$books->menu_icon("dashicons-book-alt");
