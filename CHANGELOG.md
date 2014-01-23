@@ -1,5 +1,8 @@
 # Changelog
 
+##### v1.1.0
+* make repository a composer package
+
 ##### v1.0.2
 * ability to use dashicons with `menu_icon()` method
 * removed old custom icon functions
