@@ -46,7 +46,7 @@ to be specific about other post types names you can pass an associative array:
 
 `slug` - the permalink slug for the post type (plural, lowercase, hyphens)
 
-you pass these names through the first parameter as an array like so
+you pass these names through the first parameter as an array like so:
 
 ```php
 $people = new CPT(array(
@@ -102,7 +102,7 @@ You can add exisiting taxonomies to the post type by passing the taxonomy name t
 
 ### Filters
 
-When you register a taxonomy with Advanced Custom Post Types, the taxonomy is *automagically* added to the admin edit screen as a filter and a column.
+When you register a taxonomy it is *automagically* added to the admin edit screen as a filter and a column.
 
 You can define what filters you want to appear by using the `filters()` method:
 
@@ -114,7 +114,7 @@ By passing an array of taxonomy names you can choose the filters that appear and
 
 ### Columns
 
-Advanced Custom Post Types has a number of methods to help you modify the admin columns.
+The Class has a number of methods to help you modify the admin columns.
 Taxonomies registered with this class are automagically added to the admin edit screen as columns.
 
 You can add your own custom columns to include what ever value you want, for example with our books post type we will add custom fields for a price and rating.
@@ -194,7 +194,7 @@ Would be ordered as:
 
 	1, 11, 14, 21, 3, 33, 5
 
-By adding the option true value Advanced Custom Post Types knows the values must be sorted as integers, if false or undefined, the class will sort columns as string.
+By adding the option true value the values will be sorted as integers, if false or undefined, the class will sort columns as string.
 
 so for our books example you will use:
 
