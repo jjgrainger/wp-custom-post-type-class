@@ -11,7 +11,7 @@ Add the package to your projects `composer.json` file. Visit [getcomposer.org](h
 ```json
 {
     "require": {
-        "jjgrainger/wp-custom-post-type-class": "dev"
+        "jjgrainger/wp-custom-post-type-class": "dev-master"
     }
 }
 ```
