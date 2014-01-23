@@ -4,16 +4,30 @@ A single class to help you build more advanced custom post types quickly.
 
 ## Installation
 
-First include the class file into your themes `functions.php` like so:
+#### Install with Composer
+
+Add the package to your projects `composer.json` file. Visit [getcomposer.org](http://getcomposer.org/) more information.
+
+```json
+{
+    "require": {
+        "jjgrainger/wp-custom-post-type-class": "dev"
+    }
+}
+```
+
+#### Install Manually
+
+Download and include the class file into your themes `functions.php` like so:
 
 ```php
 include_once('CPT.php');
 ```
-	
+
 and your ready to roll!
 
 ## Creating a new Custom Post type
-	
+
 To create the post type simply create a new object
 
 ```php
@@ -138,20 +152,20 @@ You do so with the `populate_column()` method like so:
 
 ```php
 $books->populate_column('column_name', function($column, $post) {
-	
+
 	// your code goes here…
 
-}); 
+});
 ```
 
 so we can populate our price column like so:
 
 ```php
 $books->populate_column('price', function($column, $post) {
-	
+
 	echo "£" . get_field('price'); // ACF get_field() function
-		
-}); 
+
+});
 ```
 
 The method will pass two variables into the function:
