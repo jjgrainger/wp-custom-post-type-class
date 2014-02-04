@@ -1,5 +1,9 @@
 # Changelog
 
+##### v1.2.0
+* allow taxonomies to be sorted with the `sortable()` method
+* use of `.gitattributes` to make package lighter when deploying for production.
+
 ##### v1.1.0
 * make repository a composer package
 

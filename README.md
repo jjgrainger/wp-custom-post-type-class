@@ -1,4 +1,4 @@
-# WP Custom Post Type Class v1.1.0
+# WP Custom Post Type Class v1.2.0
 
 A single class to help you build more advanced custom post types quickly.
 
@@ -221,7 +221,7 @@ For a full list of icons and the class names to use visit [http://melchoyce.gith
 ## Notes
 
 * The class has no methods for making custom fields for post types, use [Advanced Custom Fields (ACF)](http://advancedcustomfields.com)
-* The books example used in the README.md can be found in the [example.php](https://github.com/jjgrainger/wp-custom-post-type-class/blob/master/example.php)
+* The books example used in the README.md can be found in the [books-post-type.php](examples/books-post-type.php)
 * Licensed under the [MIT License](https://github.com/jjgrainger/wp-custom-post-type-class/blob/master/LICENSE)
 * Maintained under the [Semantic Versioning Guide](http://semver.org)
 
