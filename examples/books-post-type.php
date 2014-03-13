@@ -16,7 +16,7 @@ $books->register_taxonomy('genre');
 $books->columns(array(
     'cb' => '<input type="checkbox" />',
     'title' => __('Title'),
-    'genres' => __('Genres'),
+    'genre' => __('Genres'),
     'price' => __('Price'),
     'rating' => __('Rating'),
     'date' => __('Date')
