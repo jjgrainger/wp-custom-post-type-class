@@ -264,44 +264,7 @@ class CPT {
 
     function options_merge($defaults, $options) {
 
-        // set the new array as defaults
-        $new_array = $defaults;
-
-        // return the value if it is false
-        if($options === false) return false;
-
-        // foreach new option to be added
-        foreach($options as $key => $value) {
-
-            // if isset in the defaults array
-            if(isset($defaults[$key])) {
-
-                // if this option is a nested array
-                if(is_array($defaults[$key])) {
-
-                    // repeat the process
-                    $new_array[$key] = $this->options_merge($defaults[$key], $options[$key]);
-
-                // else if the value is not an array
-                } else {
-
-                    // overide with user submitted option
-                    $new_array[$key] = $options[$key];
-
-                }
-
-            // else if the default has not been set
-            } else {
-
-                // add it to the option
-                $new_array[$key] = $value;
-
-            }
-
-        }
-
-        // return the new array
-        return $new_array;
+        return array_replace_recursive($defaults, $options);
 
     }
 
