@@ -251,25 +251,6 @@ class CPT {
 
     }
 
-
-    /*
-        helper function options_merge
-        merges user submitted options array with default settings
-        preserving default data if not included in user options
-
-        @param  array  $defaults        the default option array
-        @param  array  $options         user submitted options to add/override defaults
-
-    */
-
-    function options_merge($defaults, $options) {
-
-        return array_replace_recursive($defaults, $options);
-
-    }
-
-
-
     /*
         helper function add_action
         used to create add_action wordpress filter
@@ -472,7 +453,7 @@ class CPT {
             );
 
         // merge user submitted options with defaults
-        $options = $this->options_merge($defaults, $this->options);
+        $options = $this->array_replace_recursive($defaults, $this->options);
 
         // set the object options as full options passed
         $this->options = $options;
@@ -582,7 +563,7 @@ class CPT {
         );
 
         // merge default options with user submitted options
-        $options = $this->options_merge($defaults, $options);
+        $options = $this->array_replace_recursive($defaults, $options);
 
         // register the taxonomy if it doesn't exist
         if(!taxonomy_exists($taxonomy_name)) {
