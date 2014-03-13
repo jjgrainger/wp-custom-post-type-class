@@ -127,7 +127,7 @@ You can define what columns you want to appear on the admin edit screen with the
 $books->columns(array(
 	'cb' => '<input type="checkbox" />',
 	'title' => __('Title'),
-	'genres' => __('Genres'),
+	'genre' => __('Genres'),
 	'price' => __('Price'),
 	'rating' => __('Rating'),
 	'date' => __('Date')
