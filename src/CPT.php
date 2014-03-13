@@ -503,9 +503,6 @@ class CPT {
         $defaults = array(
             'labels' => $labels,
             'public' => true,
-            'hierarchical' => false,
-            'menu_position' => 5,
-            'supports' => array('title', 'editor', 'thumbnail'),
             'rewrite' => array(
                 'slug' => $slug,
                 )
