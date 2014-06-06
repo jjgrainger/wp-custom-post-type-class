@@ -1,5 +1,9 @@
 # Changelog
 
+##### v1.2.2
+* fix issues when registering taxonomy across multiple post type
+* remove wrapper function `options_merge`
+
 ##### v1.2.1
 * reduce the defaults within the class
 * replace contents of `options_merge` function with `array_replace_recursive`
