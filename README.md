@@ -1,4 +1,4 @@
-# WP Custom Post Type Class v1.2.1
+# WP Custom Post Type Class v1.2.2
 
 A single class to help you build more advanced custom post types quickly.
 

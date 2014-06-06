@@ -8,6 +8,8 @@
 
     @author     jjgrainger
     @url        http://jjgrainger.co.uk
+    @version    1.2.1
+    @license    http://www.opensource.org/licenses/mit-license.html  MIT License
 
 */
 
