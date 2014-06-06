@@ -75,6 +75,16 @@ class CPT {
     public $taxonomies;
 
 
+    /*
+        @var  array  $taxonomy_settings
+        public variable that holds an array of the taxonomies associated with the post type and their options
+        used when registering the taxonomies
+        assigined on register_taxonomy()
+    */
+
+    public $taxonomy_settings;
+
+
 
     /*
         @var  array  $filters
@@ -117,7 +127,7 @@ class CPT {
     /*
         @function __contructor(@post_type_name, @options)
 
-        @param  mixed   $post_type_names    The name(s) of the post type, accepts (post type name, slug, plural, singlualr)
+        @param  mixed   $post_type_names    The name(s) of the post type, accepts (post type name, slug, plural, singluar)
         @param  array   $options            User submitted options
     */
 
@@ -181,11 +191,18 @@ class CPT {
         // register the post type
         $this->add_action('init', array(&$this, 'register_post_type'));
 
+        // register taxonomies
+        $this->add_action('init', array(&$this, 'register_taxonomies'));
+
         // add taxonomy to admin edit columns
         $this->add_filter('manage_edit-' . $this->post_type_name . '_columns', array(&$this, 'add_admin_columns'));
 
         // populate the taxonomy columns with the posts terms
         $this->add_action('manage_' . $this->post_type_name . '_posts_custom_column', array(&$this, 'populate_admin_columns'), 10, 2);
+
+        // add filter select option to admin edit
+        $this->add_action('restrict_manage_posts', array(&$this, 'add_taxonomy_filters'));
+
     }
 
 
@@ -584,36 +601,43 @@ class CPT {
         // merge default options with user submitted options
         $options = $this->options_merge($defaults, $options);
 
-        // register the taxonomy if it doesn't exist
-        if(!taxonomy_exists($taxonomy_name)) {
-
-            // register the taxonomy with Wordpress
-            $this->add_action('init', function() use($taxonomy_name, $post_type, $options) {
-                register_taxonomy($taxonomy_name, $post_type, $options);
-            });
-
-
-        } else {
-
-            // if taxonomy exists, attach exisiting taxonomy to post type
-            $this->add_action('init', function() use($taxonomy_name, $post_type) {
-                register_taxonomy_for_object_type($taxonomy_name, $post_type);
-            });
-
-        }
-
         // add the taxonomy to the object array
         // this is used to add columns and filters to admin pannel
         $this->taxonomies[] = $taxonomy_name;
 
-        // add taxonomy to admin edit columns
-        $this->add_filter('manage_edit-' . $post_type . '_columns', array(&$this, 'add_admin_columns'));
+        // create array used when registering taxonomies
+        $this->taxonomy_settings[$taxonomy_name] = $options;
 
-        // populate the taxonomy columns with the posts terms
-        $this->add_action('manage_' . $post_type . '_posts_custom_column', array(&$this, 'populate_admin_columns'), 10, 2);
+    }
 
-        // add filter select option to admin edit
-        $this->add_action('restrict_manage_posts', array(&$this, 'add_taxonomy_filters'));
+
+
+    /*
+        function register_taxonomies
+        cycles through taxonomies added with the class and registers them
+
+        function is used with add_action
+    */
+    function register_taxonomies() {
+
+        // foreach taxonomy registered with the post type
+        foreach($this->taxonomy_settings as $taxonomy_name => $options) {
+
+            // register the taxonomy if it doesn't exist
+            if(!taxonomy_exists($taxonomy_name)) {
+
+                // register the taxonomy with Wordpress
+                register_taxonomy($taxonomy_name, $this->post_type_name, $options);
+
+
+            } else {
+
+                // if taxonomy exists, attach exisiting taxonomy to post type
+                register_taxonomy_for_object_type($taxonomy_name, $this->post_type_name);
+
+            }
+        }
+
 
     }
 
