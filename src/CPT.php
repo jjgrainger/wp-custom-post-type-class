@@ -8,7 +8,7 @@
 
     @author     jjgrainger
     @url        http://jjgrainger.co.uk
-    @version    1.2.2
+    @version    1.2.3
     @license    http://www.opensource.org/licenses/mit-license.html  MIT License
 
 */
@@ -605,24 +605,25 @@ class CPT {
     */
     function register_taxonomies() {
 
-        // foreach taxonomy registered with the post type
-        foreach($this->taxonomy_settings as $taxonomy_name => $options) {
+        if(is_array($this->taxonomy_settings)) {
+            // foreach taxonomy registered with the post type
+            foreach($this->taxonomy_settings as $taxonomy_name => $options) {
 
-            // register the taxonomy if it doesn't exist
-            if(!taxonomy_exists($taxonomy_name)) {
+                // register the taxonomy if it doesn't exist
+                if(!taxonomy_exists($taxonomy_name)) {
 
-                // register the taxonomy with Wordpress
-                register_taxonomy($taxonomy_name, $this->post_type_name, $options);
+                    // register the taxonomy with Wordpress
+                    register_taxonomy($taxonomy_name, $this->post_type_name, $options);
 
 
-            } else {
+                } else {
 
-                // if taxonomy exists, attach exisiting taxonomy to post type
-                register_taxonomy_for_object_type($taxonomy_name, $this->post_type_name);
+                    // if taxonomy exists, attach exisiting taxonomy to post type
+                    register_taxonomy_for_object_type($taxonomy_name, $this->post_type_name);
 
+                }
             }
         }
-
 
     }
 

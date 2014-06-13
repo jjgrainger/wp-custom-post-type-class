@@ -1,5 +1,8 @@
 # Changelog
 
+##### v1.2.3
+* add array check for `$this->taxonomy_settings`
+
 ##### v1.2.2
 * fix issues when registering taxonomy across multiple post type
 * remove wrapper function `options_merge`
