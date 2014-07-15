@@ -860,55 +860,57 @@ class CPT {
                 $filters = $this->taxonomies;
 
             }
+            
+            if(!empty($filters)) {
 
-            // foreach of the taxonomies we want to create filters for
-            foreach($filters as $tax_slug) {
-
-                // object for taxonomy, doesn't contain the terms
-                $tax = get_taxonomy($tax_slug);
-
-                // get taxonomy terms and order by name
-                $args = array(
-                    'orderby' => 'name',
-                    'hide_empty' => false
-                );
-
-                // get taxonomy terms
-                $terms = get_terms($tax_slug, $args);
-
-                // if we have terms
-                if($terms) {
-
-                    // set up select box
-                    printf(' &nbsp;<select name="%s" class="postform">', $tax_slug);
-
-                    // default show all
-                    printf('<option value="0">%s</option>', 'Show all ' . $tax->label);
-
-                    // foreach term create an option field
-                    foreach ($terms as $term) {
-
-                        // if filtered by this term make it selected
-                        if(isset($_GET[$tax_slug]) && $_GET[$tax_slug] === $term->slug) {
-
-                            printf('<option value="%s" selected="selected">%s (%s)</option>', $term->slug, $term->name, $term->count);
-
-                        // create option for taxonomy
-                        } else {
-
-                            printf('<option value="%s">%s (%s)</option>', $term->slug, $term->name, $term->count);
-
+                // foreach of the taxonomies we want to create filters for
+                foreach($filters as $tax_slug) {
+    
+                    // object for taxonomy, doesn't contain the terms
+                    $tax = get_taxonomy($tax_slug);
+    
+                    // get taxonomy terms and order by name
+                    $args = array(
+                        'orderby' => 'name',
+                        'hide_empty' => false
+                    );
+    
+                    // get taxonomy terms
+                    $terms = get_terms($tax_slug, $args);
+    
+                    // if we have terms
+                    if($terms) {
+    
+                        // set up select box
+                        printf(' &nbsp;<select name="%s" class="postform">', $tax_slug);
+    
+                        // default show all
+                        printf('<option value="0">%s</option>', 'Show all ' . $tax->label);
+    
+                        // foreach term create an option field
+                        foreach ($terms as $term) {
+    
+                            // if filtered by this term make it selected
+                            if(isset($_GET[$tax_slug]) && $_GET[$tax_slug] === $term->slug) {
+    
+                                printf('<option value="%s" selected="selected">%s (%s)</option>', $term->slug, $term->name, $term->count);
+    
+                            // create option for taxonomy
+                            } else {
+    
+                                printf('<option value="%s">%s (%s)</option>', $term->slug, $term->name, $term->count);
+    
+                            }
+    
                         }
-
+    
+                        // end the select field
+                        print('</select>&nbsp;');
+    
                     }
-
-                    // end the select field
-                    print('</select>&nbsp;');
-
+    
                 }
-
             }
-
         }
 
     }
