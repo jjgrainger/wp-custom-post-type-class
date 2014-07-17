@@ -1,5 +1,8 @@
 # Changelog
 
+##### v1.2.4
+* add check if `$filter` array is empty
+
 ##### v1.2.3
 * add array check for `$this->taxonomy_settings`
 
