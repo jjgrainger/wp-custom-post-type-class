@@ -8,7 +8,7 @@
 
     @author     jjgrainger
     @url        http://jjgrainger.co.uk
-    @version    1.2.3
+    @version    1.2.4
     @license    http://www.opensource.org/licenses/mit-license.html  MIT License
 
 */
@@ -861,54 +861,56 @@ class CPT {
 
             }
 
-            // foreach of the taxonomies we want to create filters for
-            foreach($filters as $tax_slug) {
+            if(!empty($filters)) {
 
-                // object for taxonomy, doesn't contain the terms
-                $tax = get_taxonomy($tax_slug);
+                // foreach of the taxonomies we want to create filters for
+                foreach($filters as $tax_slug) {
 
-                // get taxonomy terms and order by name
-                $args = array(
-                    'orderby' => 'name',
-                    'hide_empty' => false
-                );
+                    // object for taxonomy, doesn't contain the terms
+                    $tax = get_taxonomy($tax_slug);
 
-                // get taxonomy terms
-                $terms = get_terms($tax_slug, $args);
+                    // get taxonomy terms and order by name
+                    $args = array(
+                        'orderby' => 'name',
+                        'hide_empty' => false
+                    );
 
-                // if we have terms
-                if($terms) {
+                    // get taxonomy terms
+                    $terms = get_terms($tax_slug, $args);
 
-                    // set up select box
-                    printf(' &nbsp;<select name="%s" class="postform">', $tax_slug);
+                    // if we have terms
+                    if($terms) {
 
-                    // default show all
-                    printf('<option value="0">%s</option>', 'Show all ' . $tax->label);
+                        // set up select box
+                        printf(' &nbsp;<select name="%s" class="postform">', $tax_slug);
 
-                    // foreach term create an option field
-                    foreach ($terms as $term) {
+                        // default show all
+                        printf('<option value="0">%s</option>', 'Show all ' . $tax->label);
 
-                        // if filtered by this term make it selected
-                        if(isset($_GET[$tax_slug]) && $_GET[$tax_slug] === $term->slug) {
+                        // foreach term create an option field
+                        foreach ($terms as $term) {
 
-                            printf('<option value="%s" selected="selected">%s (%s)</option>', $term->slug, $term->name, $term->count);
+                            // if filtered by this term make it selected
+                            if(isset($_GET[$tax_slug]) && $_GET[$tax_slug] === $term->slug) {
 
-                        // create option for taxonomy
-                        } else {
+                                printf('<option value="%s" selected="selected">%s (%s)</option>', $term->slug, $term->name, $term->count);
 
-                            printf('<option value="%s">%s (%s)</option>', $term->slug, $term->name, $term->count);
+                            // create option for taxonomy
+                            } else {
+
+                                printf('<option value="%s">%s (%s)</option>', $term->slug, $term->name, $term->count);
+
+                            }
 
                         }
 
+                        // end the select field
+                        print('</select>&nbsp;');
+
                     }
 
-                    // end the select field
-                    print('</select>&nbsp;');
-
                 }
-
             }
-
         }
 
     }
