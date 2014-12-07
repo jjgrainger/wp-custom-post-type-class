@@ -978,4 +978,13 @@ class CPT {
 			$this->options["menu_icon"] = "dashicons-admin-page";
 		}
 	}
+
+	/**
+	 * Set textdomain
+	 *
+	 * @param string $textdomain Textdomain used for translation.
+	 */
+	function set_textdomain( $textdomain ) {
+		$this->textdomain = $textdomain;
+	}
 }
