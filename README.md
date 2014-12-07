@@ -31,7 +31,7 @@ and your ready to roll!
 To create the post type simply create a new object
 
 ```php
-$books = new CPT('book');
+$books = new CPT('book', 'textdomain');
 ```
 
 The first parameter is the post type name and is required. ideally the post type name is all lowercase and words separated with an underscore `_`.
@@ -49,15 +49,16 @@ to be specific about other post types names you can pass an associative array:
 you pass these names through the first parameter as an array like so:
 
 ```php
-$people = new CPT(array(
+$people = new CPT( array(
 	'post_type_name' => 'person',
-	'singular' => 'Person',
-	'plural' => 'People',
-	'slug' => 'people'
-));
+	'singular'       => 'Person',
+	'plural'         => 'People',
+	'slug'           => 'people'
+), 'textdomain' );
 ```
+The second parameter is used for setting the textdomain, a string used for internationalising your custom post type.
 
-The optional second parameter is the arguments for the post_type.
+The optional third parameter is the arguments for the post_type.
 see [Wordpress codex](http://codex.wordpress.org/Function_Reference/register_post_type#Parameters) for available options.
 
 The Class uses the Wordpress defaults where possible.
@@ -65,7 +66,7 @@ The Class uses the Wordpress defaults where possible.
 To override the default options simply pass an array of options as the second parameter. Not all options have to be passed just the ones you want to add/override like so:
 
 ```php
-$books = new CPT('book', array(
+$books = new CPT('book', 'textdomain', array(
 	'supports' => array('title', 'editor', 'thumbnail', 'comments')
 ));
 ```
