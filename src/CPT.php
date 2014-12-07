@@ -269,119 +269,106 @@ class CPT {
 		add_filter( $action, $function, $priority, $accepted_args );
     }
 
-    /*
-        helper function get slug
-        creates url friendly slug
+	/**
+	 * Get slug
+	 *
+	 * Creates an url friendly slug.
+	 *
+	 * @param  string $name Name to slugify.
+	 * @return string $name Returns the slug.
+	 */
+	function get_slug( $name = null ) {
 
-        @param  string  $name           name to slugify
-        @return string  $name           returns the slug
-    */
+		// If no name set use the post type name.
+		if ( ! isset( $name ) ) {
 
-    function get_slug($name = null) {
+			$name = $this->post_type_name;
+		}
 
-        // if no name set use the post type name
-        if(!isset($name)) {
+		// Name to lower case.
+		$name = strtolower( $name );
 
-            $name = $this->post_type_name;
+		// Replace spaces with hyphen.
+		$name = str_replace( " ", "-", $name );
 
-        }
+		// Replace underscore with hyphen.
+		$name = str_replace( "_", "-", $name );
 
-        // name to lower case
-        $name = strtolower($name);
+		return $name;
+	}
 
-        // replace spaces with hyphen
-        $name = str_replace(" ", "-", $name);
+    /**
+	 * Get plural
+	 *
+	 * Returns the friendly plural name.
+	 *
+	 *    ucwords      capitalize words
+	 *    strtolower   makes string lowercase before capitalizing
+	 *    str_replace  replace all instances of _ to space
+	 *
+	 * @param  string $name The slug name you want to pluralize.
+	 * @return string the friendly pluralized name.
+	 */
+	function get_plural( $name = null ) {
 
-        // replace underscore with hyphen
-        $name = str_replace("_", "-", $name);
+		// If no name is passed the post_type_name is used.
+		if ( ! isset( $name ) ) {
 
-        return $name;
+			$name = $this->post_type_name;
+		}
 
+		// Return the plural name. Add 's' to the end.
+		return $this->get_human_friendly( $name ) . 's';
     }
 
+	/**
+	 * Get singular
+	 *
+	 * Returns the friendly singular name.
+	 *
+	 *    ucwords      capitalize words
+	 *    strtolower   makes string lowercase before capitalizing
+	 *    str_replace  replace all instances of _ to space
+	 *
+	 * @param string $name The slug name you want to unpluralize.
+	 * @return string The friendly singular name.
+	 */
+	function get_singular( $name = null ) {
 
+		// If no name is passed the post_type_name is used.
+		if ( ! isset( $name ) ) {
 
-    /*
-        helper function get_plural
-        returns the friendly plural name
+			$name = $this->post_type_name;
 
-        ucwords      capitalize words
-        strtolower   makes string lowercase before capitalizing
-        str_replace  replace all instances of _ to space
+		}
 
-        @param   string  $name      the slug name you want to pluralize
-        @return  string             the friendly pluralized name
-    */
-
-    function get_plural($name = null) {
-
-        // if no name is passed the post_type_name is used
-        if(!isset($name)) {
-
-            $name = $this->post_type_name;
-
-        }
-
-        // return the plural name
-        // add 's' to the end
-        return $this->get_human_friendly($name) . 's';
+		// Return the string.
+		return $this->get_human_friendly( $name );
     }
 
+	/**
+	 * Get human friendly
+	 *
+	 * Returns the human friendly name.
+	 *
+	 *    ucwords      capitalize words
+	 *    strtolower   makes string lowercase before capitalizing
+	 *    str_replace  replace all instances of hyphens and underscores to spaces
+	 *
+	 * @param string $name The name you want to make friendly.
+	 * @return string The human friendly name.
+	 */
+	function get_human_friendly( $name = null ) {
 
+		// If no name is passed the post_type_name is used.
+		if ( ! isset( $name ) ) {
 
-    /*
-        helper function get_singular
-        returns the friendly singular name
+			$name = $this->post_type_name;
+		}
 
-        ucwords      capitalize words
-        strtolower   makes string lowercase before capitalizing
-        str_replace  replace all instances of _ to space
-
-        @param   string  $name      the slug name you want to unpluralize
-        @return  string             the friendly singular name
-    */
-
-    function get_singular($name = null) {
-
-        // if no name is passed the post_type_name is used
-        if(!isset($name)) {
-
-            $name = $this->post_type_name;
-
-        }
-
-        // return the string
-        return $this->get_human_friendly($name);
-
-    }
-
-
-
-    /*
-        helper function get_human_friendly
-        returns the human friendly name
-
-        ucwords      capitalize words
-        strtolower   makes string lowercase before capitalizing
-        str_replace  replace all instances of hyphens and underscores to spaces
-
-        @param   string  $name      the name you want to make friendly
-        @return  string             the human friendly name
-    */
-
-    function get_human_friendly($name = null) {
-
-        // if no name is passed the post_type_name is used
-        if(!isset($name)) {
-
-            $name = $this->post_type_name;
-
-        }
-
-        // return human friendly name
-        return ucwords(strtolower(str_replace("-", " ", str_replace("_", " ", $name))));
-
-    }
+		// Return human friendly name.
+		return ucwords( strtolower( str_replace( "-", " ", str_replace( "_", " ", $name ) ) ) );
+	}
 
 	/**
 	 * Register Post Type
@@ -435,69 +422,65 @@ class CPT {
 		}
 	}
 
-    /*
-        function register_taxonomy
-        register a taxonomy to a post type
+	/**
+	 * Register taxonomy
+	 *
+	 * @see http://codex.wordpress.org/Function_Reference/register_taxonomy
+	 *
+	 * @param string $taxonomy_name The slug for the taxonomy.
+	 * @param array  $options Taxonomy options.
+     */
+	function register_taxonomy($taxonomy_names, $options = array()) {
 
-        @param  string          $taxonomy_name      the slug for the taxonomy
-        @param  array           $options            taxonomy options
+		// Post type defaults to $this post type if unspecified.
+		$post_type = $this->post_type_name;
 
-        see Wordpress codex
-        http://codex.wordpress.org/Function_Reference/register_taxonomy
-    */
+		// An array of the names required excluding taxonomy_name.
+		$names = array(
+			'singular',
+			'plural',
+			'slug'
+			);
 
-    function register_taxonomy($taxonomy_names, $options = array()) {
+		// if an array of names are passed
+		if ( is_array( $taxonomy_names ) ) {
 
-        // post type defaults to $this post type if unspecified
-        $post_type = $this->post_type_name;
+			// Set the taxonomy name
+			$taxonomy_name = $taxonomy_names['taxonomy_name'];
 
-        // an array of the names required excluding taxonomy_name
-        $names = array(
-            'singular',
-            'plural',
-            'slug'
-        );
+			// Cycle through possible names.
+			foreach ( $names as $name ) {
 
-        // if an array of names are passed
-        if(is_array($taxonomy_names)) {
+				// If the user has set the name.
+				if ( isset( $taxonomy_names[ $name ] ) ) {
 
-            // set the taxonomy name
-            $taxonomy_name = $taxonomy_names['taxonomy_name'];
+					// Use user submitted name.
+					$$name = $taxonomy_names[ $name ];
 
-            // cycle through possible names
-            foreach($names as $name) {
+					// Else generate the name.
+				} else {
 
-                // if the user has set the name
-                if(isset($taxonomy_names[$name])) {
+					// Define the function to be used.
+					$method = 'get_' . $name;
 
-                    // use user submitted name
-                    $$name = $taxonomy_names[$name];
+					// Generate the name
+					$$name = $this->$method( $taxonomy_name );
 
-                // else generate the name
-                } else {
+				}
+			}
 
-                    // define the fnction to be used
-                    $method = 'get_'.$name;
+			// Else if only the taxonomy_name has been supplied.
+		} else  {
 
-                    // generate the name
-                    $$name = $this->$method($taxonomy_name);
+			// Create user friendly names.
+			$taxonomy_name = $taxonomy_names;
+			$singular = $this->get_singular( $taxonomy_name );
+			$plural   = $this->get_plural( $taxonomy_name );
+			$slug     = $this->get_slug( $taxonomy_name );
 
-                }
+		}
 
-            }
-
-        // else if only the taxonomy_name has been supplied
-        } else  {
-
-            // create user friendly names
-            $taxonomy_name = $taxonomy_names;
-            $singular = $this->get_singular($taxonomy_name);
-            $plural   = $this->get_plural($taxonomy_name);
-            $slug     = $this->get_slug($taxonomy_name);
-
-        }
-
-		// Default labels
+		// Default labels.
 		$labels = array(
 			'name'                       => sprintf( __( '%s', $this->textdomain ), $plural ),
 			'singular_name'              => sprintf( __( '%s', $this->textdomain ), $singular ),
@@ -518,345 +501,312 @@ class CPT {
 			'not_found'                  => sprintf( __( 'No %s found', $this->textdomain ), $plural ),
 		);
 
-        // default options
-        $defaults = array(
-            'labels' => $labels,
-            'hierarchical' => true,
-            'rewrite' => array(
-                'slug' => $slug
-            )
-        );
+		// Default options.
+		$defaults = array(
+			'labels' => $labels,
+			'hierarchical' => true,
+			'rewrite' => array(
+				'slug' => $slug
+			)
+		);
 
-        // merge default options with user submitted options
-        $options = array_replace_recursive($defaults, $options);
+		// Merge default options with user submitted options.
+		$options = array_replace_recursive( $defaults, $options );
 
-        // add the taxonomy to the object array
-        // this is used to add columns and filters to admin pannel
-        $this->taxonomies[] = $taxonomy_name;
+		// Add the taxonomy to the object array, this is used to add columns and filters to admin panel.
+		$this->taxonomies[] = $taxonomy_name;
 
-        // create array used when registering taxonomies
-        $this->taxonomy_settings[$taxonomy_name] = $options;
+		// Create array used when registering taxonomies.
+		$this->taxonomy_settings[ $taxonomy_name ] = $options;
 
-    }
-
-
-
-    /*
-        function register_taxonomies
-        cycles through taxonomies added with the class and registers them
-
-        function is used with add_action
-    */
-    function register_taxonomies() {
-
-        if(is_array($this->taxonomy_settings)) {
-            // foreach taxonomy registered with the post type
-            foreach($this->taxonomy_settings as $taxonomy_name => $options) {
-
-                // register the taxonomy if it doesn't exist
-                if(!taxonomy_exists($taxonomy_name)) {
-
-                    // register the taxonomy with Wordpress
-                    register_taxonomy($taxonomy_name, $this->post_type_name, $options);
-
-
-                } else {
-
-                    // if taxonomy exists, attach exisiting taxonomy to post type
-                    register_taxonomy_for_object_type($taxonomy_name, $this->post_type_name);
-
-                }
-            }
-        }
-
-    }
+	}
 
 
 
-    /*
-        function add_admin_columns
-        adds columns to the admin edit screen
+    /**
+	 * Register taxonomies
+	 *
+	 * Cycles through taxonomies added with the class and registers them.
+	 */
+	function register_taxonomies() {
 
-        function is used with add_action
-    */
+		if ( is_array( $this->taxonomy_settings ) ) {
 
-    function add_admin_columns($columns) {
+			// Foreach taxonomy registered with the post type.
+			foreach ( $this->taxonomy_settings as $taxonomy_name => $options ) {
+
+				// Register the taxonomy if it doesn't exist.
+				if ( ! taxonomy_exists( $taxonomy_name ) ) {
+
+					// Register the taxonomy with Wordpress
+					register_taxonomy( $taxonomy_name, $this->post_type_name, $options );
+
+				} else {
+
+					// If taxonomy exists, attach exisiting taxonomy to post type.
+					register_taxonomy_for_object_type( $taxonomy_name, $this->post_type_name );
+				}
+			}
+		}
+	}
 
 
-        // if no user columns have been specified use following defaults
-        if(!isset($this->columns)) {
 
-            // default columns
-            $columns = array(
-                'cb' => '<input type="checkbox" />',
-                'title' => __( 'Title', $this->textdomain )
-            );
+	/**
+	 * Add admin columns
+	 *
+	 * Adds columns to the admin edit screen. Function is used with add_action
+	 *
+	 * @param array $columns Columns to be added to the admin edit screen.
+	 * @return array
+	 */
+	function add_admin_columns( $columns ) {
 
-            // if there are taxonomies registered to the post type
-            if(is_array($this->taxonomies)) {
+		// If no user columns have been specified use following defaults.
+		if ( ! isset( $this->columns ) ) {
 
-                // create a column for each taxonomy
-                foreach($this->taxonomies as $tax) {
+			// Default columns
+			$columns = array(
+				'cb' => '<input type="checkbox" />',
+				'title' => __( 'Title', $this->textdomain )
+			);
 
-                    // get the taxonomy object for labels
-                    $taxonomy_object = get_taxonomy($tax);
+			// If there are taxonomies registered to the post type.
+			if ( is_array( $this->taxonomies ) ) {
 
-					// column key is the slug, value is friendly name
+				// Create a column for each taxonomy.
+				foreach( $this->taxonomies as $tax ) {
+
+					// Get the taxonomy object for labels.
+					$taxonomy_object = get_taxonomy( $tax );
+
+					// Column key is the slug, value is friendly name.
 					$columns[ $tax ] = sprintf( __( '%s', $this->textdomain ), $taxonomy_object->labels->name );
+				}
+			}
 
-                }
+			// If post type supports comments.
+			if ( post_type_supports( $this->post_type_name, 'comments' ) ) {
 
-            }
+				$columns['comments'] = '<img alt="Comments" src="' . site_url() . '/wp-admin/images/comment-grey-bubble.png">';
+			}
 
-            // if post type supports comments
-            if(post_type_supports($this->post_type_name, 'comments')) {
+			// Add date of post to end of columns.
+			$columns['date'] = __( 'Date', $this->textdomain );
 
-                $columns['comments'] = '<img alt="Comments" src="'. site_url() .'/wp-admin/images/comment-grey-bubble.png">';
+		} else {
 
-            }
+			// Use user submitted columns, these are defined using the object columns() method.
+			$columns = $this->columns;
+		}
 
-            // add date of post to end of columns
-            $columns['date'] = __( 'Date', $this->textdomain );
+		return $columns;
+	}
 
-        } else {
+	/**
+	 * Populate admin columns
+	 *
+	 * Populate custom columns on the admin edit screen.
+	 *
+	 * @param string $column The name of the column.
+	 * @param integer $post_id The post ID.
+	 */
+	function populate_admin_columns( $column, $post_id ) {
 
-            // use user submitted columns
-            // these are defined using the object columns() method
-            $columns = $this->columns;
+		// Get wordpress $post object.
+		global $post;
 
-        }
+		// determine the column
+		switch( $column ) {
 
-        return $columns;
+			// If column is a taxonomy associated with the post type.
+			case ( taxonomy_exists( $column ) ) :
 
-    }
+				// Get the taxonomy for the post
+				$terms = get_the_terms( $post_id, $column );
 
+				// If we have terms.
+				if ( ! empty( $terms ) ) {
 
+					$output = array();
 
-    /*
-        function populate_admin_columns
-        populates custom columns on the admin edit screen
+					// Loop through each term, linking to the 'edit posts' page for the specific term.
+					foreach( $terms as $term ) {
 
-        function is used with add_action
-    */
+						// Output is an array of terms associated with the post.
+						$output[] = sprintf(
 
-    function populate_admin_columns($column, $post_id) {
+							// Define link.
+							'<a href="%s">%s</a>',
 
-        // get wordpress $post object
-        global $post;
+							// Create filter url.
+							esc_url( add_query_arg( array( 'post_type' => $post->post_type, $column => $term->slug ), 'edit.php' ) ),
 
-        // determine the column
-        switch($column) {
+							// Create friendly term name.
+							esc_html( sanitize_term_field( 'name', $term->name, $term->term_id, $column, 'display' ) )
+						);
 
-            // if column is a taxonomy associated with the post type
-            case (taxonomy_exists($column)) :
+					}
 
-                // Get the taxonomy for the post
-                $terms = get_the_terms($post_id, $column);
+					// Join the terms, separating them with a comma.
+					echo join( ', ', $output );
 
-                // if we have terms
-                if (!empty($terms)) {
-
-                    $output = array();
-
-                    // Loop through each term, linking to the 'edit posts' page for the specific term.
-                    foreach($terms as $term) {
-
-                        // output is an array of terms associated with the post
-                        $output[] = sprintf(
-
-                            // define link
-                            '<a href="%s">%s</a>',
-
-                            // create filter url
-                            esc_url(add_query_arg(array('post_type' => $post->post_type, $column => $term->slug), 'edit.php')),
-
-                            // create friendly term name
-                            esc_html(sanitize_term_field('name', $term->name, $term->term_id, $column, 'display'))
-
-                        );
-
-                    }
-
-                    // Join the terms, separating them with a comma
-                    echo join(', ', $output);
-
-                // if no terms found
-                } else {
+				// If no terms found.
+				} else {
 
 					// Get the taxonomy object for labels
 					$taxonomy_object = get_taxonomy( $column );
 
-                    // Echo no terms.
+					// Echo no terms.
 					printf( __( 'No %s', $this->textdomain ), $taxonomy_object->labels->name );
-                }
+				}
 
+			break;
 
-            break;
+			// If column is for the post ID.
+			case 'post_id' :
 
-            // if column is for the post ID
-            case 'post_id' :
+				echo $post->ID;
 
-                echo $post->ID;
+			break;
 
-            break;
+			// if the column is prepended with 'meta_', this will automagically retrieve the meta values and display them.
+			case ( preg_match( '/^meta_/', $column ) ? true : false ) :
 
-            // if the column is prepended with 'meta_'
-            // this will automagically retrieve the meta values and display them
-            case (preg_match('/^meta_/', $column) ? true : false) :
+				// meta_book_author (meta key = book_author)
+				$x = substr( $column, 5 );
 
-                // meta_book_author (meta key = book_author)
-                $x = substr($column, 5);
+				$meta = get_post_meta( $post->ID, $x );
 
-                $meta = get_post_meta($post->ID, $x);
+				echo join( ", ", $meta );
 
-                echo join(", ", $meta);
+			break;
 
-            break;
+			// If the column is post thumbnail.
+			case 'icon' :
 
-            // if the column is post thumbnail
-            case 'icon' :
+				// Create the edit link.
+				$link = esc_url( add_query_arg( array( 'post' => $post->ID, 'action' => 'edit' ), 'post.php' ) );
 
-                // create the edit link
-                $link = esc_url(add_query_arg(array('post' => $post->ID, 'action' => 'edit'), 'post.php'));
+				// If it post has a featured image.
+				if ( has_post_thumbnail() ) {
 
-                // if it post has a featured image
-                if(has_post_thumbnail()) {
-
-                    // display post featured image with edit link
-                    echo '<a href="'. $link .'">';
-                        the_post_thumbnail(array(60, 60));
+					// Display post featured image with edit link.
+					echo '<a href="' . $link . '">';
+						the_post_thumbnail( array(60, 60) );
                     echo '</a>';
 
-                } else {
+				} else {
 
-                    // display default media image with link
-                    echo '<a href="'.$link.'"><img src="'. site_url('/wp-includes/images/crystal/default.png') .'" alt="'. $post->post_title .'" /></a>';
+					// Display default media image with link.
+					echo '<a href="' . $link . '"><img src="'. site_url( '/wp-includes/images/crystal/default.png' ) .'" alt="' . $post->post_title . '" /></a>';
 
-                }
+				}
 
-            break;
+			break;
 
-            // default case checks if the column has a user function
-            // this is most commonly used for custom fields
-            default :
+			// Default case checks if the column has a user function, this is most commonly used for custom fields.
+			default :
 
-                // if there are user custom columns to populate
-                if(isset($this->custom_populate_columns) && is_array($this->custom_populate_columns)) {
+				// If there are user custom columns to populate.
+				if ( isset( $this->custom_populate_columns ) && is_array( $this->custom_populate_columns ) ) {
 
-                    // if this column has a user submitted function to run
-                    if(isset($this->custom_populate_columns[$column]) && is_callable($this->custom_populate_columns[$column])) {
+					// If this column has a user submitted function to run.
+					if ( isset( $this->custom_populate_columns[ $column ] ) && is_callable( $this->custom_populate_columns[ $column ] ) ) {
 
-                        // run the function
-                        $this->custom_populate_columns[$column]($column, $post);
+						// Run the function.
+						$this->custom_populate_columns[ $column ]( $column, $post );
 
-                    }
+					}
+				}
 
-                }
+			break;
+		} // end switch( $column )
+	}
 
-            break;
+	/**
+	 * Filters
+	 *
+	 * User function to define which taxonomy filters to display on the admin page.
+	 *
+	 * @param array $filters An array of taxonomy filters to display.
+	 */
+	function filters( $filters = array() ) {
 
-        } // end switch($column)
-
+		$this->filters = $filters;
     }
 
+	/**
+	 *  Add taxtonomy filters
+	 *
+	 * Creates select fields for filtering posts by taxonomies on admin edit screen.
+	*/
+	function add_taxonomy_filters() {
 
+		global $typenow;
+		global $wp_query;
 
-    /*
-        function filters
-        user function to define which taxonomy filters to display on the admin page
+		// Must set this to the post type you want the filter(s) displayed on.
+		if ( $typenow == $this->post_type_name ) {
 
-        @param  array  $filters         an array of taxonomy filters to display
+			// if custom filters are defined use those
+            if ( is_array( $this->filters ) ) {
 
-    */
+				$filters = $this->filters;
 
-    function filters($filters = array()) {
+			// else default to use all taxonomies associated with the post
+			} else {
 
-        $this->filters = $filters;
+				$filters = $this->taxonomies;
+			}
 
-    }
+			if ( ! empty( $filters ) ) {
 
+				// Foreach of the taxonomies we want to create filters for...
+				foreach ( $filters as $tax_slug ) {
 
+					// ...object for taxonomy, doesn't contain the terms.
+					$tax = get_taxonomy( $tax_slug );
 
+					// Get taxonomy terms and order by name.
+					$args = array(
+						'orderby' => 'name',
+						'hide_empty' => false
+					);
 
-    /*
-        function add_taxtonomy_filters
-        creates select fields for filtering posts by taxonomies on admin edit screen
+					// Get taxonomy terms.
+					$terms = get_terms( $tax_slug, $args );
 
-    */
+					// If we have terms.
+                    if ( $terms ) {
 
-    function add_taxonomy_filters() {
+						// Set up select box.
+						printf( ' &nbsp;<select name="%s" class="postform">', $tax_slug );
 
-        global $typenow;
-        global $wp_query;
+						// Default show all.
+						printf( '<option value="0">%s</option>', sprintf( __( 'Show all %s', $this->textdomain ), $tax->label ) );
 
-        // must set this to the post type you want the filter(s) displayed on
-        if($typenow == $this->post_type_name){
+						// Foreach term create an option field...
+						foreach ( $terms as $term ) {
 
-            // if custom filters are defined use those
-            if(is_array($this->filters)) {
+							// ...if filtered by this term make it selected.
+							if ( isset( $_GET[ $tax_slug ] ) && $_GET[ $tax_slug ] === $term->slug ) {
 
-                $filters = $this->filters;
+								printf( '<option value="%s" selected="selected">%s (%s)</option>', $term->slug, $term->name, $term->count );
 
-            // else default to use all taxonomies associated with the post
-            } else {
+							// ...create option for taxonomy.
+							} else {
 
-                $filters = $this->taxonomies;
-
-            }
-
-            if(!empty($filters)) {
-
-                // foreach of the taxonomies we want to create filters for
-                foreach($filters as $tax_slug) {
-
-                    // object for taxonomy, doesn't contain the terms
-                    $tax = get_taxonomy($tax_slug);
-
-                    // get taxonomy terms and order by name
-                    $args = array(
-                        'orderby' => 'name',
-                        'hide_empty' => false
-                    );
-
-                    // get taxonomy terms
-                    $terms = get_terms($tax_slug, $args);
-
-                    // if we have terms
-                    if($terms) {
-
-                        // set up select box
-                        printf(' &nbsp;<select name="%s" class="postform">', $tax_slug);
-
-                        // default show all
-                        printf('<option value="0">%s</option>', 'Show all ' . $tax->label);
-
-                        // foreach term create an option field
-                        foreach ($terms as $term) {
-
-                            // if filtered by this term make it selected
-                            if(isset($_GET[$tax_slug]) && $_GET[$tax_slug] === $term->slug) {
-
-                                printf('<option value="%s" selected="selected">%s (%s)</option>', $term->slug, $term->name, $term->count);
-
-                            // create option for taxonomy
-                            } else {
-
-                                printf('<option value="%s">%s (%s)</option>', $term->slug, $term->name, $term->count);
-
-                            }
-
-                        }
-
-                        // end the select field
-                        print('</select>&nbsp;');
-
-                    }
-
-                }
-            }
-        }
-
-    }
+								printf( '<option value="%s">%s (%s)</option>', $term->slug, $term->name, $term->count );
+							}
+						}
+						// End the select field.
+						print( '</select>&nbsp;' );
+					}
+				}
+			}
+		}
+	}
 
 	/**
 	 * Columns
