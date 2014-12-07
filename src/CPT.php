@@ -106,10 +106,10 @@ class CPT {
 	 * Constructor
 	 *
 	 * @param mixed $post_type_names The name(s) of the post type, accepts (post type name, slug, plural, singular).
-	 * @param array $options User submitted options.
 	 * @param string $textdomain Textdomain used for translation.
+	 * @param array $options User submitted options.
 	 */
-	function __construct( $post_type_names, $textdomain = '', $options = array() ) {
+	function __construct( $post_type_names, $textdomain, $options = array() ) {
 
 		// Set textdomain.
 		$this->textdomain = $textdomain;
