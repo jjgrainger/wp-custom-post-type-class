@@ -1,320 +1,273 @@
 <?php
-
-/*
-
-    Custom Post Type Class
-    used to help create custom post types for Wordpress
-    http://github.com/jjgrainger/wp-custom-post-type-class/
-
-    @author     jjgrainger
-    @url        http://jjgrainger.co.uk
-    @version    1.2.4
-    @license    http://www.opensource.org/licenses/mit-license.html  MIT License
-
-*/
-
+/**
+ * Custom Post Type Class
+ *
+ * Used to help create custom post types for Wordpress.
+ * @link http://github.com/jjgrainger/wp-custom-post-type-class/
+ *
+ * @author  jjgrainger
+ * @link    http://jjgrainger.co.uk
+ * @version 1.2.4
+ * @license http://www.opensource.org/licenses/mit-license.html MIT License
+ */
 class CPT {
 
-    /*
-        @var  string  $post_type_name
-        Public variable that holds the name of the post type
-        assigned on __contstruct()
-    */
-
+	/**
+	 * Post type name.
+	 *
+	 * @var string $post_type_name Holds the name of the post type.
+	 */
     public $post_type_name;
 
-
-
-    /*
-        @var  string  $singular
-        Public variable that holds the singular name of the post type
-        This is a human friendly name, capitalized with spaces
-        assigned on __contstruct()
-    */
-
+	/**
+	 * Holds the singular name of the post type. This is a human friendly
+	 * name, capitalized with spaces assigned on __construct().
+	 *
+	 * @var string $singular Post type singular name.
+	 */
     public $singular;
 
+	/**
+	 * Holds the plural name of the post type. This is a human friendly
+	 * name, capitalized with spaces assigned on __construct().
+	 *
+	 * @var string $plural Singular post type name.
+	 */
+	public $plural;
 
+	/**
+	 * Post type slug. This is a robot friendly name, all lowercase and uses
+	 * hyphens assigned on __construct().
+	 *
+	 * @var string $slug Holds the post type slug name.
+	 */
+	public $slug;
 
-    /*
-        @var  string  $singular
-        Public variable that holds the plural name of the post type
-        This is a human friendly name, capitalized with spaces
-        assigned on __contstruct()
-    */
+	/**
+	 * User submitted options assigned on __construct().
+	 *
+	 * @var array $options Holds the user submitted post type options.
+	 */
+	public $options;
 
-    public $plural;
+	/**
+	 * Taxonomies
+	 *
+	 * @var array $taxonomies Holds an array of taxonomies associated with the post type.
+	 */
+	public $taxonomies;
 
+	/**
+	 * Taxonomy settings, an array of the taxonomies associated with the post
+	 * type and their options used when registering the taxonomies.
+	 *
+	 * @var array $taxonomy_settings Holds the taxonomy settings.
+	 */
+	public $taxonomy_settings;
 
+	/**
+	 * Taxonomy filters. Defines which filters are to appear on admin edit
+	 * screen used in add_taxonmy_filters().
+	 *
+	 * @var array $filters Taxonomy filters.
+	 */
+	public $filters;
 
-    /*
-        @var  string  $slug
-        Public variable that holds the slug name of the post type
-        This is a robot friendly name, all lowercase and uses hyphens
-        assigned on __contstruct()
-    */
+	/**
+	 * Defines which columns are to appear on the admin edit screen used
+	 * in add_admin_columns().
+	 *
+	 * @var array $columns Columns visible in admin edit screen.
+	 */
+	public $columns;
 
-    public $slug;
+	/**
+	 * User defined functions to populate admin columns.
+	 *
+	 * @var array $custom_populate_columns User functions to populate columns. 
+	 */
+	public $custom_populate_columns;
 
+	/**
+	 * Sortable columns.
+	 *
+	 * @var array $sortable Define which columns are sortable on the admin edit screen.
+	 */
+	public $sortable;
 
+	/**
+	 * Textdomain used for translation.
+	 *
+	 * @var string $textdomain Used for internationalising.
+	 */
+	public $textdomain;
 
-    /*
-        @var  array  $options
-        public variable that holds the user submited options of the post type
-        assigined on __construct()
-    */
+	/**
+	 * Constructor
+	 *
+	 * @param mixed $post_type_names The name(s) of the post type, accepts (post type name, slug, plural, singular).
+	 * @param array $options User submitted options.
+	 * @param string $textdomain Textdomain used for translation.
+	 */
+	function __construct( $post_type_names, $textdomain = '', $options = array() ) {
 
-    public $options;
+		// Set textdomain.
+		$this->textdomain = $textdomain;
 
+        // Check if post type names is a string or an array.
+        if ( is_array( $post_type_names ) ) {
 
+			// Add names to object.
+			$names = array(
+				'singular',
+				'plural',
+				'slug'
+			);
 
-    /*
-        @var  array  $taxonomies
-        public variable that holds an array of the taxonomies associated with the post type
-        assigined on register_taxonomy()
-    */
+			// Set the post type name.
+			$this->post_type_name = $post_type_names['post_type_name'];
 
-    public $taxonomies;
+			// Cycle through possible names.
+			foreach ( $names as $name ) {
 
+				// If the name has been set by user.
+                if ( isset( $post_type_names[ $name ] ) ) {
 
-    /*
-        @var  array  $taxonomy_settings
-        public variable that holds an array of the taxonomies associated with the post type and their options
-        used when registering the taxonomies
-        assigined on register_taxonomy()
-    */
+					// Use the user setting
+					$this->$name = $post_type_names[ $name ];
 
-    public $taxonomy_settings;
-
-
-
-    /*
-        @var  array  $filters
-        use to define which filters are to appear on admin edit screen
-        used in add_taxonmy_filters()
-    */
-
-    public $filters;
-
-
-
-    /*
-        @var  array  $columns
-        use to define which columns are to appear on admin edit screen
-        used in add_admin_columns()
-    */
-
-    public $columns;
-
-
-
-    /*
-        @var  array  $custom_populate_columns
-        an array of user defined functions to populate admin columns
-    */
-
-    public $custom_populate_columns;
-
-
-
-    /*
-        @var  array  $sortable
-        use to define which columns are to sortable on admin edit screen
-    */
-
-    public $sortable;
-
-
-
-    /*
-        @function __contructor(@post_type_name, @options)
-
-        @param  mixed   $post_type_names    The name(s) of the post type, accepts (post type name, slug, plural, singluar)
-        @param  array   $options            User submitted options
-    */
-
-    function __construct($post_type_names, $options = array()) {
-
-        // check if post type names is string or array
-        if(is_array($post_type_names)) {
-
-            // add names to object
-            $names = array(
-                'singular',
-                'plural',
-                'slug'
-            );
-
-            // set the post type name
-            $this->post_type_name = $post_type_names['post_type_name'];
-
-            // cycle through possible names
-            foreach($names as $name) {
-
-                // if the name has been set by user
-                if(isset($post_type_names[$name])) {
-
-                    // use the user setting
-                    $this->$name = $post_type_names[$name];
-
-                // else generate the name
+				// Else generate the name.
                 } else {
 
-                    // define the method to be used
-                    $method = 'get_'.$name;
+					// define the method to be used
+					$method = 'get_' . $name;
 
-                    // generate the name
-                    $this->$name = $this->$method();
+					// Generate the name
+					$this->$name = $this->$method();
+				}
+			}
 
-                }
+		// Else the post type name is only supplied.
+		} else {
 
-            }
+			// Apply to post type name.
+			$this->post_type_name = $post_type_names;
 
-        // else the post type name is only supplied
-        } else {
+			// Set the slug name.
+			$this->slug = $this->get_slug();
 
-            // apply to post type name
-            $this->post_type_name = $post_type_names;
+			// Set the plural name label.
+			$this->plural = $this->get_plural();
 
-            // set the slug name
-            $this->slug = $this->get_slug();
-
-            // set the plural name label
-            $this->plural = $this->get_plural();
-
-            // set the singular name label
-            $this->singular = $this->get_singular();
-
+			// Set the singular name label.
+			$this->singular = $this->get_singular();
         }
 
-        // set the user submitted options to the object
-        $this->options = $options;
+		// Set the user submitted options to the object.
+		$this->options = $options;
 
-        // register the post type
-        $this->add_action('init', array(&$this, 'register_post_type'));
+		// Register the post type.
+		$this->add_action( 'init', array( &$this, 'register_post_type' ) );
 
-        // register taxonomies
-        $this->add_action('init', array(&$this, 'register_taxonomies'));
+		// Register taxonomies.
+		$this->add_action( 'init', array( &$this, 'register_taxonomies' ) );
 
-        // add taxonomy to admin edit columns
-        $this->add_filter('manage_edit-' . $this->post_type_name . '_columns', array(&$this, 'add_admin_columns'));
+		// Add taxonomy to admin edit columns.
+		$this->add_filter( 'manage_edit-' . $this->post_type_name . '_columns', array( &$this, 'add_admin_columns' ) );
 
-        // populate the taxonomy columns with the posts terms
-        $this->add_action('manage_' . $this->post_type_name . '_posts_custom_column', array(&$this, 'populate_admin_columns'), 10, 2);
+		// Populate the taxonomy columns with the posts terms.
+		$this->add_action( 'manage_' . $this->post_type_name . '_posts_custom_column', array( &$this, 'populate_admin_columns' ), 10, 2 );
 
-        // add filter select option to admin edit
-        $this->add_action('restrict_manage_posts', array(&$this, 'add_taxonomy_filters'));
-
+		// Add filter select option to admin edit.
+		$this->add_action( 'restrict_manage_posts', array( &$this, 'add_taxonomy_filters' ) );
     }
 
+	/**
+	 * Get
+	 *
+	 * Helper function to get an object variable.
+	 *
+	 * @param string $var The variable you would like to retrieve.
+	 * @return mixed Returns the value on success, boolean false whe it fails.
+	 */
+	function get( $var ) {
 
+		// If the variable exists.
+		if ( $this->$var ) {
 
-    /*
-        helper function get
-        used to get an object variable
+			// On success return the value.
+			return $this->$var;
 
-        @param  string  $var        the variable you would like to retrieve
-        @return mixed               returns the value on sucess, bool (false) when fails
+		} else {
 
-    */
-
-    function get($var) {
-
-        // if the variable exisits
-        if($this->$var) {
-
-            // on success return the value
-            return $this->$var;
-
-        } else {
-
-            // on fail return false
-            return false;
-
+			// on fail return false
+			return false;
         }
     }
 
+	/**
+	 * Set
+	 *
+	 * Helper function used to set an object variable. Can overwrite existsing
+	 * variables or create new ones. Cannot overwrite reserved variables.
+	 *
+	 * @param mixed $var The variable you would like to create/overwrite.
+	 * @param mixed $value The value you would like to set to the variable.
+	 */
+	function set( $var, $value ) {
 
+		// An array of reserved variables that cannot be overwritten.
+		$reserved = array(
+			'config',
+			'post_type_name',
+			'singular',
+			'plural',
+			'slug',
+			'options',
+			'taxonomies'
+		);
 
-    /*
-        helper function set
-        used to set an object variable
-        can overwrite exisiting variables and create new ones
-        cannot overwrite reserved variables
+		// If the variable is not a reserved variable
+        if ( ! in_array( $var, $reserved ) ) {
 
-        @param  mixed  $var         the variable you would like to create/overwrite
-        @param  mixed  $value       the value you would like to set to the variable
+			// Write variable and value
+			$this->$var = $value;
+		}
+	}
 
-    */
+	/**
+	 * Add Action
+	 *
+	 * Helper function to add add_action WordPress filters.
+	 *
+	 * @param string $action Name of the action.
+	 * @param string $function Function to hook that will run on action.
+	 * @param integet $priority Order in which to execute the function, relation to other functions hooked to this action.
+	 * @param integer $accepted_args The number of arguments the function accepts. 
+	 */
+	function add_action( $action, $function, $priority = 10, $accepted_args = 1 ) {
 
-    function set($var, $value) {
-
-        // an array of reserved variables that cannot be overwritten
-        $reserved = array(
-            'config',
-            'post_type_name',
-            'singular',
-            'plural',
-            'slug',
-            'options',
-            'taxonomies'
-        );
-
-        // if the variable is not a reserved variable
-        if(!in_array($var, $reserved)) {
-
-            // write variable and value
-            $this->$var = $value;
-
-        }
-
+		// Pass variables into WordPress add_action function
+		add_action( $action, $function, $priority, $accepted_args );
     }
 
+	/**
+	 * Add Filter
+	 *
+	 * Create add_filter WordPress filter.
+	 *
+	 * @see http://codex.wordpress.org/Function_Reference/add_filter
+	 *
+	 * @param  string  $action           Name of the action to hook to, e.g 'init'.
+	 * @param  string  $function         Function to hook that will run on @action.
+	 * @param  int     $priority         Order in which to execute the function, relation to other function hooked to this action.
+	 * @param  int     $accepted_args    The number of arguements the function accepts.
+	 */
+	function add_filter( $action, $function, $priority = 10, $accepted_args = 1 ) {
 
-
-    /*
-        helper function add_action
-        used to create add_action wordpress filter
-
-        see Wordpress Codex
-        http://codex.wordpress.org/Function_Reference/add_action
-
-        @param  string  $action            name of the action to hook to, e.g 'init'
-        @param  string  $function          function to hook that will run on @action
-        @param  int     $priority          order in which to execute the function, relation to other function hooked to this action
-        @param  int     $accepted_args     the number of arguements the function accepts
-    */
-
-    function add_action($action, $function, $priority = 10, $accepted_args = 1) {
-
-        // pass variables into Wordpress add_action function
-        add_action($action, $function, $priority, $accepted_args);
-
+		// Pass variables into Wordpress add_action function
+		add_filter( $action, $function, $priority, $accepted_args );
     }
-
-
-
-    /*
-        helper function add_filter
-        used to create add_filter wordpress filter
-
-        see Wordpress Codex
-        http://codex.wordpress.org/Function_Reference/add_filter
-
-        @param  string  $action           name of the action to hook to, e.g 'init'
-        @param  string  $function         function to hook that will run on @action
-        @param  int     $priority         order in which to execute the function, relation to other function hooked to this action
-        @param  int     $accepted_args    the number of arguements the function accepts
-    */
-
-    function add_filter($action, $function, $priority = 10, $accepted_args = 1) {
-
-        // pass variables into Wordpress add_action function
-        add_filter($action, $function, $priority, $accepted_args);
-
-    }
-
-
 
     /*
         helper function get slug
@@ -430,66 +383,57 @@ class CPT {
 
     }
 
+	/**
+	 * Register Post Type
+	 *
+	 * @see http://codex.wordpress.org/Function_Reference/register_post_type
+	 */
+	function register_post_type() {
 
+		// Friendly post type names.
+		$plural   = $this->plural;
+		$singular = $this->singular;
+		$slug     = $this->slug;
 
-    /*
-        register_post_type function
-        object function to register the post type
+		// Default labels.
+		$labels = array(
+			'name'               => sprintf( __( '%s', $this->textdomain ), $plural ),
+			'singular_name'      => sprintf( __( '%s', $this->textdomain ), $singular ),
+			'menu_name'          => sprintf( __( '%s', $this->textdomain ), $plural ),
+			'all_items'          => sprintf( __( '%s', $this->textdomain ), $plural ),
+			'add_new'            => __( 'Add New', $this->textdomain ),
+			'add_new_item'       => sprintf( __( 'Add New %s', $this->textdomain ), $singular ),
+			'edit_item'          => sprintf( __( 'Edit %s', $this->textdomain ), $singular ),
+			'new_item'           => sprintf( __( 'New %', $this->textdomain ), $singular ),
+			'view_item'          => sprintf( __( 'View %s', $this->textdomain ), $singular ),
+			'search_items'       => sprintf( __( 'Search %s', $this->textdomain ), $plural ),
+			'not_found'          => sprintf( __( 'No %s found', $this->textdomain ), $plural ),
+			'not_found_in_trash' => sprintf( __( 'No %s found in Trash', $this->textdomain ), $plural ),
+			'parent_item_colon'  => sprintf( __( 'Parent %s:', $this->textdomain ), $singular )
+		);
 
-        see Wordpress Codex
-        http://codex.wordpress.org/Function_Reference/register_post_type
-    */
+		// Default options.
+		$defaults = array(
+			'labels' => $labels,
+			'public' => true,
+			'rewrite' => array(
+				'slug' => $slug,
+			)
+		);
 
-    function register_post_type() {
+		// Merge user submitted options with defaults.
+		$options = array_replace_recursive( $defaults, $this->options );
 
-        // friendly post type names
-        $plural   = $this->plural;
-        $singular = $this->singular;
-        $slug     = $this->slug;
+		// Set the object options as full options passed.
+		$this->options = $options;
 
-        // default labels
-        $labels = array(
-            'name' => __($plural),
-            'singular_name' => __($singular),
-            'menu_name' => __($plural),
-            'all_items' => __($plural),
-            'add_new' => _('Add New'),
-            'add_new_item' => __('Add New ' . $singular),
-            'edit_item' => __('Edit ' . $singular),
-            'new_item' => __('New ' . $singular),
-            'view_item' => __('View ' . $singular),
-            'search_items' => __('Search ' . $plural),
-            'not_found' =>  __('No ' . $plural . ' found'),
-            'not_found_in_trash' => __('No ' . $plural . ' found in Trash'),
-            'parent_item_colon' => __('Parent ' . $singular . ':')
-        );
+		// Check that the post type doesn't already exist.
+        if ( ! post_type_exists( $this->post_type_name ) ) {
 
-        // default options
-        $defaults = array(
-            'labels' => $labels,
-            'public' => true,
-            'rewrite' => array(
-                'slug' => $slug,
-                )
-            );
-
-        // merge user submitted options with defaults
-        $options = array_replace_recursive($defaults, $this->options);
-
-        // set the object options as full options passed
-        $this->options = $options;
-
-        // check that the post type doesn't already exist
-        if(!post_type_exists($this->post_type_name)) {
-
-            // register the post type
-            register_post_type($this->post_type_name, $options);
-
-        }
-
-    }
-
-
+			// Register the post type.
+			register_post_type( $this->post_type_name, $options );
+		}
+	}
 
     /*
         function register_taxonomy
@@ -553,26 +497,26 @@ class CPT {
 
         }
 
-        // default labels
-        $labels = array(
-            'name' => _($plural),
-            'singular_name' => _($singular),
-            'menu_name' => __($plural),
-            'all_items' => __('All ' . $plural),
-            'edit_item' => __('Edit ' . $singular),
-            'view_item' => __('View ' . $singular),
-            'update_item' => __('Update ' . $singular),
-            'add_new_item' => __('Add New ' . $singular),
-            'new_item_name' => __('New ' . $singular . ' Name'),
-            'parent_item' => __('Parent ' . $plural),
-            'parent_item_colon' => __('Parent ' . $plural .':'),
-            'search_items' =>  __('Search ' . $plural),
-            'popular_items' => __('Popular ' . $plural),
-            'separate_items_with_commas' => __('Seperate ' . $plural . ' with commas'),
-            'add_or_remove_items' => __('Add or remove ' . $plural),
-            'choose_from_most_used' => __('Choose from most used ' . $plural),
-            'not_found' => __('No ' . $plural  . ' found'),
-        );
+		// Default labels
+		$labels = array(
+			'name'                       => sprintf( __( '%s', $this->textdomain ), $plural ),
+			'singular_name'              => sprintf( __( '%s', $this->textdomain ), $singular ),
+			'menu_name'                  => sprintf( __( '%s', $this->textdomain ), $plural ),
+			'all_items'                  => sprintf( __( 'All %s', $this->textdomain ), $plural ),
+			'edit_item'                  => sprintf( __( 'Edit %s', $this->textdomain ), $singular ),
+			'view_item'                  => sprintf( __( 'View %s', $this->textdomain ), $singular ),
+			'update_item'                => sprintf( __( 'Update %s', $this->textdomain ), $singular ),
+			'add_new_item'               => sprintf( __( 'Add New %s', $this->textdomain ), $singular ),
+			'new_item_name'              => sprintf( __( 'New %s Name', $this->textdomain ), $singular ),
+			'parent_item'                => sprintf( __( 'Parent %s', $this->textdomain ), $plural ),
+			'parent_item_colon'          => sprintf( __( 'Parent %s:', $this->textdomain ), $plural ),
+			'search_items'               => sprintf( __( 'Search %s', $this->textdomain ), $plural ),
+			'popular_items'              => sprintf( __( 'Popular %s', $this->textdomain ), $plural ),
+			'separate_items_with_commas' => sprintf( __( 'Seperate %s with commas', $this->textdomain ), $plural ),
+			'add_or_remove_items'        => sprintf( __( 'Add or remove %s', $this->textdomain ), $plural ),
+			'choose_from_most_used'      => sprintf( __( 'Choose from most used %s', $this->textdomain ), $plural ),
+			'not_found'                  => sprintf( __( 'No %s found', $this->textdomain ), $plural ),
+		);
 
         // default options
         $defaults = array(
@@ -645,7 +589,7 @@ class CPT {
             // default columns
             $columns = array(
                 'cb' => '<input type="checkbox" />',
-                'title' => __('Title')
+                'title' => __( 'Title', $this->textdomain )
             );
 
             // if there are taxonomies registered to the post type
@@ -657,8 +601,8 @@ class CPT {
                     // get the taxonomy object for labels
                     $taxonomy_object = get_taxonomy($tax);
 
-                    // column key is the slug, value is friendly name
-                    $columns[$tax] = __($taxonomy_object->labels->name);
+					// column key is the slug, value is friendly name
+					$columns[ $tax ] = sprintf( __( '%s', $this->textdomain ), $taxonomy_object->labels->name );
 
                 }
 
@@ -672,7 +616,7 @@ class CPT {
             }
 
             // add date of post to end of columns
-            $columns['date'] = __('Date');
+            $columns['date'] = __( 'Date', $this->textdomain );
 
         } else {
 
@@ -739,12 +683,11 @@ class CPT {
                 // if no terms found
                 } else {
 
-                    // get the taxonomy object for labels
-                    $taxonomy_object = get_taxonomy($column);
+					// Get the taxonomy object for labels
+					$taxonomy_object = get_taxonomy( $column );
 
-                    // echo no terms
-                    _e('No ' . $taxonomy_object->labels->name);
-
+                    // Echo no terms.
+					printf( __( 'No %s', $this->textdomain ), $taxonomy_object->labels->name );
                 }
 
 
@@ -915,200 +858,174 @@ class CPT {
 
     }
 
+	/**
+	 * Columns
+	 *
+	 * Choose columns to be displayed on the admin edit screen.
+	 *
+	 * @param array $columns An array of columns to be displayed.
+	 */
+    function columns( $columns ) {
 
+		// If columns is set.
+        if( isset( $columns ) ) {
 
-    /*
-        function columns
-        user function to choose columns to be displayed on the admin edit screen
-
-        @param  array  $columns         an array of columns to be displayed
-
-    */
-
-    function columns($columns) {
-
-        // if columns is set
-        if(isset($columns)) {
-
-            // assign user submitted columns to object
-            $this->columns = $columns;
+			// Assign user submitted columns to object.
+			$this->columns = $columns;
 
         }
+	}
 
-    }
+	/**
+	 * Populate columns
+	 *
+	 * Define what and how to populate a speicific admin column.
+	 *
+	 * @param string $column_name The name of the column to populate.
+	 * @param function $function An anonyous function to run when populating the column.
+	 */
+	function populate_column( $column_name, $function ) {
 
+		$this->custom_populate_columns[ $column_name ] = $function;
 
+	}
 
-    /*
-        function populate_column
-        user function to define what and how to populate a specific admin column
+	/**
+	 * Sortable
+	 *
+	 * Define what columns are sortable in the admin edit screen.
+	 *
+	 * @param array $columns An array of columns that are sortable.
+	 */
+	function sortable( $columns = array() ) {
 
-        @param  string  $column_name        the name of the column to populate
-        @param  func    $function           an anonymous function to run when populating the column
-    */
+		// Assign user defined sortable columns to object variable.
+		$this->sortable = $columns;
 
-    function populate_column($column_name, $function) {
+		// Run filter to make columns sortable.
+		$this->add_filter( 'manage_edit-' . $this->post_type_name . '_sortable_columns', array( &$this, 'make_columns_sortable' ) );
 
-        $this->custom_populate_columns[$column_name] = $function;
+		// Run action that sorts columns on request.
+		$this->add_action( 'load-edit.php', array( &$this, 'load_edit' ) );
+	}
 
-    }
+	/**
+	 * Make columns sortable
+	 *
+	 * Internal function that adds user defined sortable columns to WordPress default columns.
+	 *
+	 * @param array $columns Columns to be sortable.
+	 *
+	 */
+    function make_columns_sortable( $columns ) {
 
+		// For each sortable column.
+		foreach ( $this->sortable as $column => $values ) {
 
+			// Make an array to merge into wordpress sortable columns.
+			$sortable_columns[ $column ] = $values[0];
+		}
 
-    /*
-        function sortable
-        user function define what columns are sortable in admin edit screen
+		// Merge sortable columns array into wordpress sortable columns.
+		$columns = array_merge( $sortable_columns, $columns );
 
-        @param  array  $columns         an array of the columns that are sortable
-    */
+		return $columns;
+	}
 
-    function sortable($columns = array()) {
-
-        // assign user defined sortable columns to object variable
-        $this->sortable = $columns;
-
-        // run filter to make columns sortable
-        $this->add_filter('manage_edit-' . $this->post_type_name . '_sortable_columns', array(&$this, 'make_columns_sortable'));
-
-        // run action that sorts columns on request
-        $this->add_action('load-edit.php', array(&$this, 'load_edit'));
-
-    }
-
-
-
-    /*
-        function make_columns_sortable
-        internal function that adds any user defined sortable columns to wordpress default columns
-
-    */
-
-    function make_columns_sortable($columns) {
-
-        // for each sortable column
-        foreach($this->sortable as $column => $values) {
-
-            // make an array to merege into wordpress sortable columns
-            $sortable_columns[$column] = $values[0];
-
-        }
-
-
-        // merge sortable columns array into wordpress sortable columns
-        $columns = array_merge($sortable_columns, $columns);
-
-        return $columns;
-
-    }
-
-
-
-    /*
-        function load_edit
-        only sort columns on the edit.php page when requested
-
-    */
-
+	/**
+	 * Load edit
+	 *
+	 * Sort columns only on the edit.php page when requested.
+	 *
+	 * @see http://codex.wordpress.org/Plugin_API/Filter_Reference/request
+	 */
     function load_edit() {
 
-        // run filter to sort columns when requested
-        $this->add_filter( 'request', array(&$this, 'sort_columns') );
+        // Run filter to sort columns when requested
+        $this->add_filter( 'request', array( &$this, 'sort_columns' ) );
 
     }
 
+	/**
+	 * Sort columns
+	 *
+	 * Internal function that sorts columns on request.
+	 *
+	 * @see load_edit()
+	 *
+	 * @param array $vars The query vars submitted by user.
+	 * @return array A sorted array.
+	 */
+	function sort_columns( $vars ) {
 
+        // Cycle through all sortable columns submitted by the user
+        foreach ( $this->sortable as $column => $values ) {
 
-    /*
-        function sort columns
-        internal function that sorts columns on request
-
-        run by load_edit() filter
-
-        @param  array  $vars        the query vars submitted by user
-
-    */
-
-    function sort_columns($vars) {
-
-        // cycle through all sortable columns submitted by the user
-        foreach($this->sortable as $column => $values) {
-
-            // retrieve the meta key from the user submitted array of sortable columns
+			// Retrieve the meta key from the user submitted array of sortable columns
             $meta_key = $values[0];
 
-            // if the meta_key is a taxonomy
-            if(taxonomy_exists($meta_key)) {
+			// If the meta_key is a taxonomy
+            if( taxonomy_exists( $meta_key ) ) {
 
-                // sort by taxonomy
-                $key = "taxonomy";
+				// Sort by taxonomy.
+				$key = "taxonomy";
 
-            } else {
+			} else {
 
-                // else by meta key
-                $key = "meta_key";
-
+				// else by meta key.
+				$key = "meta_key";
             }
 
-            // if the optional parameter is set and is set to true
-            if(isset($values[1]) && true === $values[1]) {
+            // If the optional parameter is set and is set to true
+            if ( isset( $values[1] ) && true === $values[1] ) {
 
-                // vaules needed to be ordered by integer value
-                $orderby = 'meta_value_num';
+				// Vaules needed to be ordered by integer value
+				$orderby = 'meta_value_num';
 
-            } else {
+			} else {
 
-                // values are to be order by string value
-                $orderby = 'meta_value';
+				// Values are to be order by string value
+				$orderby = 'meta_value';
+			}
 
-            }
+			// Check if we're viewing this post type
+			if ( isset( $vars['post_type'] ) && $this->post_type_name == $vars['post_type'] ) {
 
-            // Check if we're viewing this post type
-            if (isset($vars['post_type']) && $this->post_type_name == $vars['post_type']) {
+				// find the meta key we want to order posts by
+				if ( isset( $vars['orderby'] ) && $meta_key == $vars['orderby'] ) {
 
-                // find the meta key we want to order posts by
-                if (isset($vars['orderby']) && $meta_key == $vars['orderby']) {
+					// Merge the query vars with our custom variables
+					$vars = array_merge(
+						$vars,
+						array(
+							'meta_key' => $meta_key,
+							'orderby' => $orderby
+						)
+					);
+				}
+			}
+		}
+		return $vars;
+	}
 
-                    // merge the query vars with our custom variables
-                    $vars = array_merge($vars,
-                        array(
-                            'meta_key' => $meta_key,
-                            'orderby' => $orderby
-                        )
-                    );
-                }
+	/**
+	 * Set menu icon
+	 *
+	 * Use this function to set the menu icon in the admin dashboard. Since WordPress v3.8
+	 * dashicons are used. For more information see @link http://melchoyce.github.io/dashicons/
+	 *
+	 * @param string $icon dashicon name
+	 */
+    function menu_icon( $icon = "dashicons-admin-page" ) {
 
-            }
+		if ( is_string( $icon ) && stripos( $icon, "dashicons" ) !== false ) {
 
-        }
+			$this->options["menu_icon"] = $icon;
 
-        return $vars;
-    }
+		} else {
 
-
-
-    /*
-        function menu icon
-        used to change the menu icon in the admin dashboard
-        pass name of dashicon, list found here http://melchoyce.github.io/dashicons/
-
-        @param  mixed  $icon        a string of the name of the icon to use
-    */
-
-    function menu_icon($icon = "dashicons-admin-page") {
-
-        // WP 3.8 changed the icon system to use an icon font.
-        // http://melchoyce.github.io/dashicons/
-
-        if(is_string($icon) && stripos($icon, "dashicons") !== FALSE) {
-
-            $this->options["menu_icon"] = $icon;
-
-        } else {
-            // set a default
-            $this->options["menu_icon"] = "dashicons-admin-page";
-
-        }
-
-    }
-
+			// Set a default menu icon
+			$this->options["menu_icon"] = "dashicons-admin-page";
+		}
+	}
 }
