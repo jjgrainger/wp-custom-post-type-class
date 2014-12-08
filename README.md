@@ -49,16 +49,16 @@ to be specific about other post types names you can pass an associative array:
 you pass these names through the first parameter as an array like so:
 
 ```php
-$people = new CPT( array(
+$people = new CPT();
+$people->add( array(
 	'post_type_name' => 'person',
 	'singular'       => 'Person',
 	'plural'         => 'People',
 	'slug'           => 'people'
-), 'textdomain' );
+) );
 ```
-The second parameter is used for setting the textdomain, a string used for internationalising your custom post type.
 
-The optional third parameter is the arguments for the post_type.
+The optional second parameter is the arguments for the post_type.
 see [Wordpress codex](http://codex.wordpress.org/Function_Reference/register_post_type#Parameters) for available options.
 
 The Class uses the Wordpress defaults where possible.
@@ -73,6 +73,18 @@ $books = new CPT('book', 'textdomain', array(
 
 See the [Wordpress codex](http://codex.wordpress.org/Function_Reference/register_post_type#Parameters) for all available options.
 
+If you need to set a textdomain, add a line calling the set_textdomain function before adding any custom post types. By default the internal textdomain is set to "cpt" without quotes.
+
+```php
+$people = new CPT();
+$people->set_textdomain('your-textdomain');
+$people->add( array(
+	'post_type_name' => 'person',
+	'singular'       => 'Person',
+	'plural'         => 'People',
+	'slug'           => 'people'
+) );
+```
 
 ## Adding Taxonomies
 
