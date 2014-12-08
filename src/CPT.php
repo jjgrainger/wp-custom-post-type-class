@@ -96,23 +96,34 @@ class CPT {
 	public $sortable;
 
 	/**
-	 * Textdomain used for translation.
+	 * Textdomain used for translation. Use the set_textdomain() method to set a custom textdomain.
 	 *
-	 * @var string $textdomain Used for internationalising.
+	 * @var string $textdomain Used for internationalising. Defaults to "cpt" without quotes.
 	 */
 	public $textdomain;
 
 	/**
 	 * Constructor
 	 *
+	 * Initialize the CPT class.
+	 */
+	function __construct() {
+
+		if ( empty( $this->textdomain ) ) {
+			$this->textdomain = 'cpt';
+		}
+
+	}
+
+	/**
+	 * Add
+	 *
+	 * Register a custom post type.
+	 *
 	 * @param mixed $post_type_names The name(s) of the post type, accepts (post type name, slug, plural, singular).
-	 * @param string $textdomain Textdomain used for translation.
 	 * @param array $options User submitted options.
 	 */
-	function __construct( $post_type_names, $textdomain, $options = array() ) {
-
-		// Set textdomain.
-		$this->textdomain = $textdomain;
+	function add( $post_type_names, $options = array() ) {
 
         // Check if post type names is a string or an array.
         if ( is_array( $post_type_names ) ) {
@@ -391,7 +402,7 @@ class CPT {
 			'add_new'            => __( 'Add New', $this->textdomain ),
 			'add_new_item'       => sprintf( __( 'Add New %s', $this->textdomain ), $singular ),
 			'edit_item'          => sprintf( __( 'Edit %s', $this->textdomain ), $singular ),
-			'new_item'           => sprintf( __( 'New %', $this->textdomain ), $singular ),
+			'new_item'           => sprintf( __( 'New %s', $this->textdomain ), $singular ),
 			'view_item'          => sprintf( __( 'View %s', $this->textdomain ), $singular ),
 			'search_items'       => sprintf( __( 'Search %s', $this->textdomain ), $plural ),
 			'not_found'          => sprintf( __( 'No %s found', $this->textdomain ), $plural ),
