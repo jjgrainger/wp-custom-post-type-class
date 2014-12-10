@@ -100,30 +100,17 @@ class CPT {
 	 *
 	 * @var string $textdomain Used for internationalising. Defaults to "cpt" without quotes.
 	 */
-	public $textdomain;
+	public $textdomain = 'cpt';
 
 	/**
 	 * Constructor
-	 *
-	 * Initialize the CPT class.
-	 */
-	function __construct() {
-
-		if ( empty( $this->textdomain ) ) {
-			$this->textdomain = 'cpt';
-		}
-
-	}
-
-	/**
-	 * Add
 	 *
 	 * Register a custom post type.
 	 *
 	 * @param mixed $post_type_names The name(s) of the post type, accepts (post type name, slug, plural, singular).
 	 * @param array $options User submitted options.
 	 */
-	function add( $post_type_names, $options = array() ) {
+	function __construct( $post_type_names, $options = array() ) {
 
         // Check if post type names is a string or an array.
         if ( is_array( $post_type_names ) ) {
