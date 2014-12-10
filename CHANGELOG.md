@@ -1,5 +1,9 @@
 # Changelog
 
+##### v1.3.0
+* fix translation issues
+* new method to set custom textdomain with `set_textdomain()`
+
 ##### v1.2.4
 * add check if `$filter` array is empty
 
