@@ -1,4 +1,4 @@
-# WP Custom Post Type Class v1.2.4
+# WP Custom Post Type Class v1.3
 
 A single class to help you build more advanced custom post types quickly.
 
@@ -217,10 +217,17 @@ $books->menu_icon("dashicons-book-alt");
 
 For a full list of icons and the class names to use visit [http://melchoyce.github.io/dashicons/](http://melchoyce.github.io/dashicons/)
 
+### Translation
+
+The class is setup for translation, but if you need to set your own textdomain to work with your theme or plugin use the `set_textdomain()` method:
+
+```php
+$books->set_textdomain('your-textdomain');
+```
 
 ## Notes
 
-* The class has no methods for making custom fields for post types, use [Advanced Custom Fields (ACF)](http://advancedcustomfields.com)
+* The class has no methods for making custom fields for post types, use [Advanced Custom Fields](http://advancedcustomfields.com)
 * The books example used in the README.md can be found in the [books-post-type.php](examples/books-post-type.php)
 * Licensed under the [MIT License](https://github.com/jjgrainger/wp-custom-post-type-class/blob/master/LICENSE)
 * Maintained under the [Semantic Versioning Guide](http://semver.org)
