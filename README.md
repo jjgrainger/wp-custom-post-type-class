@@ -31,7 +31,7 @@ and your ready to roll!
 To create the post type simply create a new object
 
 ```php
-$books = new CPT('book', 'textdomain');
+$books = new CPT('book');
 ```
 
 The first parameter is the post type name and is required. ideally the post type name is all lowercase and words separated with an underscore `_`.
@@ -49,13 +49,12 @@ to be specific about other post types names you can pass an associative array:
 you pass these names through the first parameter as an array like so:
 
 ```php
-$people = new CPT();
-$people->add( array(
+$people = new CPT(array(
 	'post_type_name' => 'person',
-	'singular'       => 'Person',
-	'plural'         => 'People',
-	'slug'           => 'people'
-) );
+	'singular' => 'Person',
+	'plural' => 'People',
+	'slug' => 'people'
+));
 ```
 
 The optional second parameter is the arguments for the post_type.
@@ -66,25 +65,13 @@ The Class uses the Wordpress defaults where possible.
 To override the default options simply pass an array of options as the second parameter. Not all options have to be passed just the ones you want to add/override like so:
 
 ```php
-$books = new CPT('book', 'textdomain', array(
+$books = new CPT('book', array(
 	'supports' => array('title', 'editor', 'thumbnail', 'comments')
 ));
 ```
 
 See the [Wordpress codex](http://codex.wordpress.org/Function_Reference/register_post_type#Parameters) for all available options.
 
-If you need to set a textdomain, add a line calling the set_textdomain function before adding any custom post types. By default the internal textdomain is set to "cpt" without quotes.
-
-```php
-$people = new CPT();
-$people->set_textdomain('your-textdomain');
-$people->add( array(
-	'post_type_name' => 'person',
-	'singular'       => 'Person',
-	'plural'         => 'People',
-	'slug'           => 'people'
-) );
-```
 
 ## Adding Taxonomies
 
@@ -230,10 +217,17 @@ $books->menu_icon("dashicons-book-alt");
 
 For a full list of icons and the class names to use visit [http://melchoyce.github.io/dashicons/](http://melchoyce.github.io/dashicons/)
 
+### Translation
+
+The class is setup for translation, but if you need to set your own textdomain to work with your theme or plugin use the `set_textdomain()` method:
+
+```php
+$books->set_textdomain('your-textdomain');
+```
 
 ## Notes
 
-* The class has no methods for making custom fields for post types, use [Advanced Custom Fields (ACF)](http://advancedcustomfields.com)
+* The class has no methods for making custom fields for post types, use [Advanced Custom Fields](http://advancedcustomfields.com)
 * The books example used in the README.md can be found in the [books-post-type.php](examples/books-post-type.php)
 * Licensed under the [MIT License](https://github.com/jjgrainger/wp-custom-post-type-class/blob/master/LICENSE)
 * Maintained under the [Semantic Versioning Guide](http://semver.org)
