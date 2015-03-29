@@ -84,7 +84,7 @@ class CPT {
 	/**
 	 * User defined functions to populate admin columns.
 	 *
-	 * @var array $custom_populate_columns User functions to populate columns. 
+	 * @var array $custom_populate_columns User functions to populate columns.
 	 */
 	public $custom_populate_columns;
 
@@ -164,11 +164,11 @@ class CPT {
 		// Set the user submitted options to the object.
 		$this->options = $options;
 
-		// Register the post type.
-		$this->add_action( 'init', array( &$this, 'register_post_type' ) );
-
 		// Register taxonomies.
 		$this->add_action( 'init', array( &$this, 'register_taxonomies' ) );
+
+		// Register the post type.
+		$this->add_action( 'init', array( &$this, 'register_post_type' ) );
 
 		// Add taxonomy to admin edit columns.
 		$this->add_filter( 'manage_edit-' . $this->post_type_name . '_columns', array( &$this, 'add_admin_columns' ) );
@@ -241,7 +241,7 @@ class CPT {
 	 * @param string $action Name of the action.
 	 * @param string $function Function to hook that will run on action.
 	 * @param integet $priority Order in which to execute the function, relation to other functions hooked to this action.
-	 * @param integer $accepted_args The number of arguments the function accepts. 
+	 * @param integer $accepted_args The number of arguments the function accepts.
 	 */
 	function add_action( $action, $function, $priority = 10, $accepted_args = 1 ) {
 
