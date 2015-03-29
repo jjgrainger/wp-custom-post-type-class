@@ -1,5 +1,8 @@
 # Changelog
 
+##### v1.3.1
+* register taxonomies before post type to fix issues with taxonomy permalinks
+
 ##### v1.3.0
 * fix translation issues
 * new method to set custom textdomain with `set_textdomain()`
