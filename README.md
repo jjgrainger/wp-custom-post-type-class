@@ -92,11 +92,19 @@ $books->register_taxonomy(array(
 ));
 ```
 
-Again options can be passed optionally as an array. see the [Wordpress codex](http://codex.wordpress.org/Function_Reference/register_taxonomy#Parameters) for all possible options.
+Again options can be passed optionally as an array. see the [WordPress codex](http://codex.wordpress.org/Function_Reference/register_taxonomy#Parameters) for all possible options.
 
 ### Existing Taxonomies
 
 You can add exisiting taxonomies to the post type by passing the taxonomy name through the `register_taxonomy` method. You will only need to specify the options for the custom taxonomy **once**, when its first registered.
+
+## Default Post Type
+
+To add taxonomies etc. to the existing default post type, `post`, just invoke the `CPT` class with `post` as the first parameter.
+
+```php
+$post = new CPT('post');
+```
 
 ## Admin Edit Screen
 
