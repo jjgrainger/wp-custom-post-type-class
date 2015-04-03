@@ -24,7 +24,7 @@ Download and include the class file into your themes `functions.php` like so:
 include_once('CPT.php');
 ```
 
-and your ready to roll!
+and you’re ready to roll!
 
 ## Creating a new Custom Post type
 
@@ -58,9 +58,9 @@ $people = new CPT(array(
 ```
 
 The optional second parameter is the arguments for the post_type.
-see [Wordpress codex](http://codex.wordpress.org/Function_Reference/register_post_type#Parameters) for available options.
+see [WordPress codex](http://codex.wordpress.org/Function_Reference/register_post_type#Parameters) for available options.
 
-The Class uses the Wordpress defaults where possible.
+The Class uses the WordPress defaults where possible.
 
 To override the default options simply pass an array of options as the second parameter. Not all options have to be passed just the ones you want to add/override like so:
 
@@ -70,7 +70,7 @@ $books = new CPT('book', array(
 ));
 ```
 
-See the [Wordpress codex](http://codex.wordpress.org/Function_Reference/register_post_type#Parameters) for all available options.
+See the [WordPress codex](http://codex.wordpress.org/Function_Reference/register_post_type#Parameters) for all available options.
 
 
 ## Adding Taxonomies
@@ -217,7 +217,7 @@ $books->sortable(array(
 
 #### Dashicons
 
-With Wordpress 3.8 comes [dashicons](http://melchoyce.github.io/dashicons/) an icon font you can use with your custom post types. To use simply pass the icon name through the `menu_icon()` method like so:
+With WordPress 3.8 comes [dashicons](http://melchoyce.github.io/dashicons/) an icon font you can use with your custom post types. To use simply pass the icon name through the `menu_icon()` method like so:
 
 ```php
 $books->menu_icon("dashicons-book-alt");
