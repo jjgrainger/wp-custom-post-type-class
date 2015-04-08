@@ -103,7 +103,7 @@ You can add exisiting taxonomies to the post type by passing the taxonomy name t
 To add taxonomies etc. to the existing default post type, `post`, just invoke the `CPT` class with `post` as the first parameter.
 
 ```php
-$post = new CPT('post');
+$default = new CPT('post');
 ```
 
 ## Admin Edit Screen
