@@ -564,7 +564,7 @@ class CPT {
 		if ( ! isset( $this->columns ) ) {
 
 			// Default columns
-			$columns = array(
+			$defaults = array(
 				'cb' => '<input type="checkbox" />',
 				'title' => __( 'Title', $this->textdomain )
 			);
@@ -591,6 +591,8 @@ class CPT {
 
 			// Add date of post to end of columns.
 			$columns['date'] = __( 'Date', $this->textdomain );
+
+			$columns = array_replace_recursive( $defaults, $columns );
 
 		} else {
 
