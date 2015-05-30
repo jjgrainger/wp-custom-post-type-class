@@ -7,7 +7,7 @@
  *
  * @author  jjgrainger
  * @link    http://jjgrainger.co.uk
- * @version 1.3.1
+ * @version 1.3.2
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  */
 class CPT {
@@ -64,6 +64,13 @@ class CPT {
 	 * @var array $taxonomy_settings Holds the taxonomy settings.
 	 */
 	public $taxonomy_settings;
+
+	/**
+	 * Exisiting taxonomies to be registered after the posty has been registered
+	 *
+	 * @var array $exisiting_taxonomies holds exisiting taxonomies
+	 */
+	public $exisiting_taxonomies;
 
 	/**
 	 * Taxonomy filters. Defines which filters are to appear on admin edit
@@ -169,6 +176,9 @@ class CPT {
 
 		// Register the post type.
 		$this->add_action( 'init', array( &$this, 'register_post_type' ) );
+
+		// Register exisiting taxonomies.
+		$this->add_action( 'init', array( &$this, 'register_exisiting_taxonomies' ) );
 
 		// Add taxonomy to admin edit columns.
 		$this->add_filter( 'manage_edit-' . $this->post_type_name . '_columns', array( &$this, 'add_admin_columns' ) );
@@ -438,7 +448,7 @@ class CPT {
 			'singular',
 			'plural',
 			'slug'
-			);
+		);
 
 		// if an array of names are passed
 		if ( is_array( $taxonomy_names ) ) {
@@ -541,14 +551,24 @@ class CPT {
 
 				} else {
 
-					// If taxonomy exists, attach exisiting taxonomy to post type.
-					register_taxonomy_for_object_type( $taxonomy_name, $this->post_type_name );
+					// If taxonomy exists, register it later with register_exisiting_taxonomies
+					$this->exisiting_taxonomies[] = $taxonomy_name;
 				}
 			}
 		}
 	}
 
+	/**
+	 * Register Exisiting Taxonomies
+	 *
+	 * Cycles through exisiting taxonomies and registers them after the post type has been registered
+	 */
+	function register_exisiting_taxonomies() {
 
+		foreach( $this->exisiting_taxonomies as $taxonomy_name ) {
+			register_taxonomy_for_object_type( $taxonomy_name, $this->post_type_name );
+		}
+	}
 
 	/**
 	 * Add admin columns
@@ -560,37 +580,52 @@ class CPT {
 	 */
 	function add_admin_columns( $columns ) {
 
-		// If no user columns have been specified use following defaults.
+		// If no user columns have been specified, add taxonomies
 		if ( ! isset( $this->columns ) ) {
 
-			// Default columns
-			$columns = array(
-				'cb' => '<input type="checkbox" />',
-				'title' => __( 'Title', $this->textdomain )
-			);
+			$new_columns = array();
 
-			// If there are taxonomies registered to the post type.
-			if ( is_array( $this->taxonomies ) ) {
+			// determine which column to add custom taxonomies after
+			if ( in_array( 'post_tag', $this->taxonomies ) || $this->post_type_name === 'post' ) {
+				$after = 'tags';
+			} elseif( in_array( 'category', $this->taxonomies ) || $this->post_type_name === 'post' ) {
+				$after = 'categories';
+			} elseif( post_type_supports( $this->post_type_name, 'author' ) ) {
+				$after = 'author';
+			} else {
+				$after = 'title';
+			}
 
-				// Create a column for each taxonomy.
-				foreach( $this->taxonomies as $tax ) {
+			// foreach exisiting columns
+			foreach( $columns as $key => $title ) {
 
-					// Get the taxonomy object for labels.
-					$taxonomy_object = get_taxonomy( $tax );
+				// add exisiting column to the new column array
+				$new_columns[$key] = $title;
 
-					// Column key is the slug, value is friendly name.
-					$columns[ $tax ] = sprintf( __( '%s', $this->textdomain ), $taxonomy_object->labels->name );
+				// we want to add taxonomy columns after a specific column
+				if( $key === $after ) {
+
+					// If there are taxonomies registered to the post type.
+					if ( is_array( $this->taxonomies ) ) {
+
+						// Create a column for each taxonomy.
+						foreach( $this->taxonomies as $tax ) {
+
+							// WordPress adds Categories and Tags automatically, ignore these
+							if( $tax !== 'category' && $tax !== 'post_tag' ) {
+								// Get the taxonomy object for labels.
+								$taxonomy_object = get_taxonomy( $tax );
+
+								// Column key is the slug, value is friendly name.
+								$new_columns[ $tax ] = sprintf( __( '%s', $this->textdomain ), $taxonomy_object->labels->name );
+							}
+						}
+					}
 				}
 			}
 
-			// If post type supports comments.
-			if ( post_type_supports( $this->post_type_name, 'comments' ) ) {
-
-				$columns['comments'] = '<img alt="Comments" src="' . site_url() . '/wp-admin/images/comment-grey-bubble.png">';
-			}
-
-			// Add date of post to end of columns.
-			$columns['date'] = __( 'Date', $this->textdomain );
+			// overide with new columns
+			$columns = $new_columns;
 
 		} else {
 

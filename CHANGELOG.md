@@ -1,5 +1,10 @@
 # Changelog
 
+##### v1.3.2
+* fix register taxonomies exisiting taxonomies after post type is regitered
+* fix `add_admin_columns` to work with 3rd party plugins
+* capital P dangit
+
 ##### v1.3.1
 * register taxonomies before post type to fix issues with taxonomy permalinks
 
