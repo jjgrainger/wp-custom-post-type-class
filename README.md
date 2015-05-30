@@ -72,6 +72,13 @@ $books = new CPT('book', array(
 
 See the [WordPress codex](http://codex.wordpress.org/Function_Reference/register_post_type#Parameters) for all available options.
 
+## Existing Post Types
+
+To work with exisiting post types, simply pass the post type name into the class constructor
+
+```php
+$blog = new CPT('post');
+```
 
 ## Adding Taxonomies
 
