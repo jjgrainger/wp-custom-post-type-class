@@ -66,6 +66,13 @@ class CPT {
 	public $taxonomy_settings;
 
 	/**
+	 * Exisiting taxonomies to be registered after the posty has been registered
+	 *
+	 * @var array $exisiting_taxonomies holds exisiting taxonomies
+	 */
+	public $exisiting_taxonomies;
+
+	/**
 	 * Taxonomy filters. Defines which filters are to appear on admin edit
 	 * screen used in add_taxonmy_filters().
 	 *
@@ -169,6 +176,9 @@ class CPT {
 
 		// Register the post type.
 		$this->add_action( 'init', array( &$this, 'register_post_type' ) );
+
+		// Register exisiting taxonomies.
+		$this->add_action( 'init', array( &$this, 'register_exisiting_taxonomies' ) );
 
 		// Add taxonomy to admin edit columns.
 		$this->add_filter( 'manage_edit-' . $this->post_type_name . '_columns', array( &$this, 'add_admin_columns' ) );
@@ -438,7 +448,7 @@ class CPT {
 			'singular',
 			'plural',
 			'slug'
-			);
+		);
 
 		// if an array of names are passed
 		if ( is_array( $taxonomy_names ) ) {
@@ -541,14 +551,24 @@ class CPT {
 
 				} else {
 
-					// If taxonomy exists, attach exisiting taxonomy to post type.
-					register_taxonomy_for_object_type( $taxonomy_name, $this->post_type_name );
+					// If taxonomy exists, register it later with register_exisiting_taxonomies
+					$this->exisiting_taxonomies[] = $taxonomy_name;
 				}
 			}
 		}
 	}
 
+	/**
+	 * Register Exisiting Taxonomies
+	 *
+	 * Cycles through exisiting taxonomies and registers them after the post type has been registered
+	 */
+	function register_exisiting_taxonomies() {
 
+		foreach( $this->exisiting_taxonomies as $taxonomy_name ) {
+			register_taxonomy_for_object_type( $taxonomy_name, $this->post_type_name );
+		}
+	}
 
 	/**
 	 * Add admin columns
