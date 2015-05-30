@@ -24,7 +24,7 @@ Download and include the class file into your themes `functions.php` like so:
 include_once('CPT.php');
 ```
 
-and your ready to roll!
+and you’re ready to roll!
 
 ## Creating a new Custom Post type
 
@@ -104,6 +104,14 @@ Again options can be passed optionally as an array. see the [WordPress codex](ht
 ### Existing Taxonomies
 
 You can add exisiting taxonomies to the post type by passing the taxonomy name through the `register_taxonomy` method. You will only need to specify the options for the custom taxonomy **once**, when its first registered.
+
+## Default Post Type
+
+To add taxonomies etc. to the existing default post type, `post`, just invoke the `CPT` class with `post` as the first parameter.
+
+```php
+$default = new CPT('post');
+```
 
 ## Admin Edit Screen
 
