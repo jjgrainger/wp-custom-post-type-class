@@ -7,7 +7,7 @@
  *
  * @author  jjgrainger
  * @link    http://jjgrainger.co.uk
- * @version 1.3.2
+ * @version 1.3.3
  * @license http://www.opensource.org/licenses/mit-license.html MIT License
  */
 class CPT {
@@ -565,8 +565,10 @@ class CPT {
 	 */
 	function register_exisiting_taxonomies() {
 
-		foreach( $this->exisiting_taxonomies as $taxonomy_name ) {
-			register_taxonomy_for_object_type( $taxonomy_name, $this->post_type_name );
+		if( is_array( $this->exisiting_taxonomies ) ) {
+			foreach( $this->exisiting_taxonomies as $taxonomy_name ) {
+				register_taxonomy_for_object_type( $taxonomy_name, $this->post_type_name );
+			}
 		}
 	}
 

@@ -1,5 +1,8 @@
 # Changelog
 
+##### v1.3.3
+* add check if exisiting_taxonomies is an array
+
 ##### v1.3.2
 * fix register taxonomies exisiting taxonomies after post type is regitered
 * fix `add_admin_columns` to work with 3rd party plugins
