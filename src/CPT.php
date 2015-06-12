@@ -592,9 +592,9 @@ class CPT {
 			$new_columns = array();
 
 			// determine which column to add custom taxonomies after
-			if ( in_array( 'post_tag', $this->taxonomies ) || $this->post_type_name === 'post' ) {
+			if ( is_array( $this->taxonomies ) && in_array( 'post_tag', $this->taxonomies ) || $this->post_type_name === 'post' ) {
 				$after = 'tags';
-			} elseif( in_array( 'category', $this->taxonomies ) || $this->post_type_name === 'post' ) {
+			} elseif( is_array( $this->taxonomies ) && in_array( 'category', $this->taxonomies ) || $this->post_type_name === 'post' ) {
 				$after = 'categories';
 			} elseif( post_type_supports( $this->post_type_name, 'author' ) ) {
 				$after = 'author';
