@@ -188,6 +188,10 @@ class CPT {
 
 		// Add filter select option to admin edit.
 		$this->add_action( 'restrict_manage_posts', array( &$this, 'add_taxonomy_filters' ) );
+
+		// rewrite post update messages
+		$this->add_filter( 'post_updated_messages', array( &$this, 'updated_messages' ) );
+		$this->add_filter( 'bulk_post_updated_messages', array( &$this, 'bulk_updated_messages' ), 10, 2 );
     }
 
 	/**
@@ -1021,5 +1025,61 @@ class CPT {
 	 */
 	function set_textdomain( $textdomain ) {
 		$this->textdomain = $textdomain;
+	}
+
+	/**
+	 * Updated messages
+	 *
+	 * Internal function that modifies the post type names in updated messages
+	 *
+	 * @param array $messages an array of post updated messages
+	 */
+	function updated_messages( $messages ) {
+
+	    $post = get_post();
+	    $singular = $this->singular;
+
+	    $messages[$this->post_type_name] = array(
+	        0 => '',
+	        1 => sprintf( __( '%s updated.', $this->textdomain ), $singular ),
+	        2 => __( 'Custom field updated.', $this->textdomain ),
+	        3 => __( 'Custom field deleted.', $this->textdomain ),
+	        4 => sprintf( __( '%s updated.', $this->textdomain ), $singular ),
+	        5 => isset( $_GET['revision'] ) ? sprintf( __( '%2$s restored to revision from %1$s', $this->textdomain ), wp_post_revision_title( (int) $_GET['revision'], false ), $singular ) : false,
+	        6 => sprintf( __( '%s updated.', $this->textdomain ), $singular ),
+	        7 => sprintf( __( '%s saved.', $this->textdomain ), $singular ),
+	        8 => sprintf( __( '%s submitted.', $this->textdomain ), $singular ),
+	        9 => sprintf(
+	            __( '%2$s scheduled for: <strong>%1$s</strong>.', $this->textdomain ),
+	            date_i18n( __( 'M j, Y @ G:i', $this->textdomain ), strtotime( $post->post_date ) ),
+	            $singular
+	        ),
+	        10 => sprintf( __( '%s draft updated.', $this->textdomain ), $singular ),
+	    );
+
+	    return $messages;
+	}
+
+	/**
+	 * Bulk updated messages
+	 *
+	 * Internal function that modifies the post type names in bulk updated messages
+	 *
+	 * @param array $messages an array of bulk updated messages
+	 */
+	function bulk_updated_messages( $bulk_messages, $bulk_counts ) {
+
+	    $singular = $this->singular;
+	    $plural = $this->plural;
+
+	    $bulk_messages[ $this->post_type_name ] = array(
+	        'updated'   => _n( '%s '.$singular.' updated.', '%s '.$plural.' updated.', $bulk_counts['updated'] ),
+	        'locked'    => _n( '%s '.$singular.' not updated, somebody is editing it.', '%s '.$plural.' not updated, somebody is editing them.', $bulk_counts['locked'] ),
+	        'deleted'   => _n( '%s '.$singular.' permanently deleted.', '%s '.$plural.' permanently deleted.', $bulk_counts['deleted'] ),
+	        'trashed'   => _n( '%s '.$singular.' moved to the Trash.', '%s '.$plural.' moved to the Trash.', $bulk_counts['trashed'] ),
+	        'untrashed' => _n( '%s '.$singular.' restored from the Trash.', '%s '.$plural.' restored from the Trash.', $bulk_counts['untrashed'] ),
+	    );
+
+	    return $bulk_messages;
 	}
 }
