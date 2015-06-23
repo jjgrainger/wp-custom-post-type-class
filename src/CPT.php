@@ -750,7 +750,7 @@ class CPT {
 					if ( isset( $this->custom_populate_columns[ $column ] ) && is_callable( $this->custom_populate_columns[ $column ] ) ) {
 
 						// Run the function.
-						$this->custom_populate_columns[ $column ]( $column, $post );
+						call_user_func_array(  $this->custom_populate_columns[ $column ], array( $column, $post ) );
 
 					}
 				}
@@ -867,11 +867,11 @@ class CPT {
 	 * Define what and how to populate a speicific admin column.
 	 *
 	 * @param string $column_name The name of the column to populate.
-	 * @param function $function An anonyous function to run when populating the column.
+	 * @param mixed $callback An anonyous function or callable array to call when populating the column.
 	 */
-	function populate_column( $column_name, $function ) {
+	function populate_column( $column_name, $callback ) {
 
-		$this->custom_populate_columns[ $column_name ] = $function;
+		$this->custom_populate_columns[ $column_name ] = $callback;
 
 	}
 
