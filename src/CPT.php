@@ -427,6 +427,7 @@ class CPT {
 
 			// Register the post type.
 			register_post_type( $this->post_type_name, $options );
+			flush_rewrite_rules();
 		}
 	}
 
