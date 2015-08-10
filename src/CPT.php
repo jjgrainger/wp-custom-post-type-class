@@ -1082,4 +1082,13 @@ class CPT {
 
 	    return $bulk_messages;
 	}
+
+	/**
+	 * Flush
+	 *
+	 * Flush rewrite rules programatically
+	 */
+	function flush() {
+		flush_rewrite_rules();
+	}
 }
