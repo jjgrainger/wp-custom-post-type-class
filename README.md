@@ -1,4 +1,4 @@
-# WP Custom Post Type Class v1.3.3
+# WP Custom Post Type Class v1.4
 
 A single class to help you build more advanced custom post types quickly.
 
@@ -230,6 +230,15 @@ The class is setup for translation, but if you need to set your own textdomain t
 
 ```php
 $books->set_textdomain('your-textdomain');
+```
+
+### Flush Rewrite Rules
+
+You can programmatically recreate the sites rewrite rules with the `flush()` method.
+This is an expensive operation and should be used with caution, see [codex](https://codex.wordpress.org/Function_Reference/flush_rewrite_rules) for more.
+
+```php
+$books->flush();
 ```
 
 ## Notes
