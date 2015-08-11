@@ -1,5 +1,11 @@
 # Changelog
 
+##### v1.4
+* fix error with taxonomy arrays when generating columns
+* run `custom_populate_columns` callbacks using `call_user_func_array()`
+* add post updated messages
+* add flush method
+
 ##### v1.3.3
 * add check if exisiting_taxonomies is an array
 
