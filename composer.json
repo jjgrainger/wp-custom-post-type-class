@@ -1,5 +1,6 @@
 {
 	"name": "jjgrainger/wp-custom-post-type-class",
+	"version": "1.4",
 	"description": "A single class to help you build more advanced custom post types quickly.",
 	"homepage": "https://github.com/jjgrainger/wp-custom-post-type-class",
 	"license": "MIT",
