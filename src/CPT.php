@@ -181,10 +181,10 @@ class CPT {
         $this->add_action( 'init', array( &$this, 'register_exisiting_taxonomies' ) );
 
         // Add taxonomy to admin edit columns.
-        $this->add_filter( 'manage_edit-' . $this->post_type_name . '_columns', array( &$this, 'add_admin_columns' ) );
+        $this->add_filter( 'manage_edit-' . $this->slug . '_columns', array( &$this, 'add_admin_columns' ) );
 
         // Populate the taxonomy columns with the posts terms.
-        $this->add_action( 'manage_' . $this->post_type_name . '_posts_custom_column', array( &$this, 'populate_admin_columns' ), 10, 2 );
+        $this->add_action( 'manage_' . $this->slug . '_posts_custom_column', array( &$this, 'populate_admin_columns' ), 10, 2 );
 
         // Add filter select option to admin edit.
         $this->add_action( 'restrict_manage_posts', array( &$this, 'add_taxonomy_filters' ) );
