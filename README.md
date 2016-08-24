@@ -1,3 +1,5 @@
+**N.B** I've released an updated version of the project to a new repository, [PostTypes](https://github.com/jjgrainger/PostTypes).
+
 # WP Custom Post Type Class v1.4
 
 A single class to help you build more advanced custom post types quickly.
