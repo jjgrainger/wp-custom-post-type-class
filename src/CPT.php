@@ -636,7 +636,9 @@ class CPT {
         } else {
 
             // Use user submitted columns, these are defined using the object columns() method.
-            $columns = $this->columns;
+            $columns = array_merge(
+                $columns, $this->columns
+            );
         }
 
         return $columns;
