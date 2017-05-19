@@ -2,7 +2,9 @@
 
 # WP Custom Post Type Class v1.4
 
-A single class to help you build more advanced custom post types quickly.
+[![Latest Stable Version](https://poser.pugx.org/jjgrainger/wp-custom-post-type-class/v/stable)](https://packagist.org/packages/jjgrainger/wp-custom-post-type-class) [![Total Downloads](https://poser.pugx.org/jjgrainger/wp-custom-post-type-class/downloads)](https://packagist.org/packages/jjgrainger/wp-custom-post-type-class) [![License](https://poser.pugx.org/jjgrainger/wp-custom-post-type-class/license)](https://packagist.org/packages/jjgrainger/wp-custom-post-type-class)
+
+> A single class to help you build more advanced custom post types quickly.
 
 ## Installation
 
